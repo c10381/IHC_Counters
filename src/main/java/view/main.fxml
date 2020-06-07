@@ -9,7 +9,8 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171">
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171"
+         fx:controller="main.Main" >
   <tabs>
     <Tab text="新增檔案">
       <content>
@@ -21,7 +22,7 @@
                     </columns>
                   </TableView>
                   <ImageView fitHeight="183.0" fitWidth="245.0" layoutX="336.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true" />
-                  <Button layoutX="32.0" layoutY="328.0" mnemonicParsing="false" text="Add">
+                  <Button layoutX="32.0" layoutY="328.0" mnemonicParsing="false" text="Add" onAction="#handleFileChooserAction">
                      <rotationAxis>
                         <Point3D />
                      </rotationAxis>

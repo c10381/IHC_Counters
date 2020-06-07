@@ -1,4 +1,4 @@
-package controller;
+package models;
 
 import lombok.Builder;
 import lombok.Data;
