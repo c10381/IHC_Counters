@@ -1,7 +1,9 @@
 package controller;
 
+import ij.ImagePlus;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
@@ -12,6 +14,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import models.Settings;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -61,13 +64,15 @@ public class Controller implements Initializable {
     @FXML public void getSelectedFilePath() {
         selected = table.getSelectionModel().getSelectedItem();
         image.setImage(this.retrievePic(selected));
+        this.runAnalysis();
     }
 
     /**
      * 取得 前端設定 的資料以及所有 上傳檔案的路徑
-     * @param settings
      */
-    public void settings(Settings settings){
+    public void runAnalysis(){
+        settings.setFilePaths(filePaths);
+        var images = settings.getFilePaths().stream().map(filepath-> new ImagePlus (filepath, SwingFXUtils.fromFXImage(this.retrievePic(filepath),null))).collect(Collectors.toList());
 
     }
 
