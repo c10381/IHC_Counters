@@ -16,9 +16,9 @@
       <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <TableView layoutX="32.0" layoutY="14.0" prefHeight="314.0" prefWidth="292.0">
+                  <TableView fx:id="table" layoutX="32.0" layoutY="14.0" prefHeight="314.0" prefWidth="292.0">
                     <columns>
-                      <TableColumn prefWidth="290.0" text="待分析圖片" />
+                      <TableColumn fx:id="filePathColumn" prefWidth="290.0" text="待分析圖片" />
                     </columns>
                   </TableView>
                   <ImageView fitHeight="183.0" fitWidth="245.0" layoutX="336.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true" />
