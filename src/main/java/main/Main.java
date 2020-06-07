@@ -38,7 +38,7 @@ public class Main extends Application {
         FileChooser chooser = new FileChooser();
         Stage stage = new Stage();
         List<File> files = chooser.showOpenMultipleDialog(stage);
-        if(files.size() != 0){
+        if(files != null){
             var filePaths = files.stream().map(File::getAbsolutePath).collect(Collectors.toList());
             settings.setFilePaths(filePaths);
         }
