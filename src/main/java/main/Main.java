@@ -1,5 +1,6 @@
 package main;
 
+import controller.Controller;
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -9,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import models.Settings;
@@ -21,11 +23,13 @@ import java.util.stream.Collectors;
 
 public class Main extends Application {
 
-    Settings settings = Settings.builder().build();
-    List<String> filePaths = new ArrayList<>();
+    private Settings settings = Settings.builder().build();
+    private List<String> filePaths = new ArrayList<>();
+    private Controller controller = new Controller();
 
     @FXML private TableView<String> table;
     @FXML private TableColumn<String, String> filePathColumn;
+    @FXML private ImageView image;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -53,4 +57,17 @@ public class Main extends Application {
             table.setItems(FXCollections.observableList(filePaths));
         }
     }
+
+    @FXML public void removeFile(){
+
+    }
+
+    /**
+     * onMouseClicked 事件 點選上傳檔案路徑後 旁邊會顯示已選的圖檔
+     */
+    @FXML public void getSelectedFilePath() {
+        String selected = table.getSelectionModel().getSelectedItem();
+        image.setImage(controller.retrievePic(selected));
+    }
+
 }
