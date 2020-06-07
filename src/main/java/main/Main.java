@@ -26,6 +26,7 @@ public class Main extends Application {
     private Settings settings = Settings.builder().build();
     private List<String> filePaths = new ArrayList<>();
     private Controller controller = new Controller();
+    private String selected;
 
     @FXML private TableView<String> table;
     @FXML private TableColumn<String, String> filePathColumn;
@@ -58,15 +59,18 @@ public class Main extends Application {
         }
     }
 
+    /**
+     * 按 remove 移除圖片路徑
+     */
     @FXML public void removeFile(){
-
+        table.getItems().remove(selected);
     }
 
     /**
      * onMouseClicked 事件 點選上傳檔案路徑後 旁邊會顯示已選的圖檔
      */
     @FXML public void getSelectedFilePath() {
-        String selected = table.getSelectionModel().getSelectedItem();
+        selected = table.getSelectionModel().getSelectedItem();
         image.setImage(controller.retrievePic(selected));
     }
 
