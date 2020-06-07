@@ -1,10 +1,7 @@
 package models;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -14,15 +11,17 @@ import java.util.List;
 @Builder
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+
 public class Settings {
 
     String color;
-    Integer lowThresholdLevel;
-    Integer upperThresholdLevel;
-    Integer lowerSize;
-    Integer higherSize;
-    BigDecimal lowerCircularity;
-    BigDecimal upperCircularity;
+    Double lowThresholdLevel;
+    Double upperThresholdLevel;
+    Double lowerSize;
+    Double higherSize;
+    Double lowerCircularity;
+    Double upperCircularity;
     Boolean saveOverlayMaskPics;
     List<String> filePaths;
 
