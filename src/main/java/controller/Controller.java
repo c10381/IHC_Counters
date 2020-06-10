@@ -6,15 +6,18 @@ import javafx.collections.FXCollections;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import models.Settings;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,18 +26,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
-
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Controller implements Initializable {
 
 
-    private Settings settings = Settings.builder().build();
-    private List<String> filePaths = new ArrayList<>();
+    private Settings settings;
+    private List<String> filePaths;
     private String selected;
 
     @FXML private TableView<String> table;
     @FXML private TableColumn<String, String> filePathColumn;
     @FXML private ImageView image;
+    @FXML ChoiceBox<String> colorChoiceBox;
 
     /**
      * 按 addBtn 跳出選擇上傳的圖片
