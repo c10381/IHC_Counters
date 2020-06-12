@@ -26,20 +26,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+
 public class Controller implements Initializable {
 
 
-    private Settings settings;
-    private List<String> filePaths;
-    private String selected;
+    private Settings settings = Settings.builder().build();
+    private List<String> filePaths = new ArrayList<>();
+    private String selected = "";
 
     @FXML private TableView<String> table;
     @FXML private TableColumn<String, String> filePathColumn;
     @FXML private ImageView image;
-    @FXML ChoiceBox<String> colorChoiceBox;
+    @FXML private ChoiceBox<String> colorChoiceBox;
 
     /**
      * 按 addBtn 跳出選擇上傳的圖片
@@ -73,17 +71,16 @@ public class Controller implements Initializable {
     }
 
     /**
-     * 取得 前端設定 的資料以及所有 上傳檔案的路徑
+     * 取得 前端設定 的資料以及所有 上傳檔案的路徑 並轉成ImagePlus格式
      */
     public void runAnalysis(){
         settings.setFilePaths(filePaths);
         var images = settings.getFilePaths().stream().map(filepath-> new ImagePlus (filepath, SwingFXUtils.fromFXImage(this.retrievePic(filepath),null))).collect(Collectors.toList());
-
     }
 
     /**
      * 當使用者點選圖片位置後 到檔案去撈圖片顯示
-     * @param filePath
+     * @param filePath 圖片路徑
      * @return Image 圖片檔
      */
     public Image retrievePic(String filePath){
