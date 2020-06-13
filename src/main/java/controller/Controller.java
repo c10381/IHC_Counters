@@ -75,7 +75,7 @@ public class Controller implements Initializable {
      */
     public void runAnalysis(){
         settings.setFilePaths(filePaths);
-        var images = settings.getFilePaths().stream().map(filepath-> new ImagePlus (filepath, SwingFXUtils.fromFXImage(this.retrievePic(filepath),null))).collect(Collectors.toList());
+        var images = settings.getFilePaths().stream().map(filepath-> new ImagePlus(filepath, SwingFXUtils.fromFXImage(this.retrievePic(filepath),null))).collect(Collectors.toList());
     }
 
     /**
