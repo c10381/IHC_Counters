@@ -3,18 +3,20 @@
 <?import java.lang.String?>
 <?import javafx.geometry.Point3D?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<?import org.controlsfx.control.RangeSlider?>
 
 <ToolBar prefHeight="455.0" prefWidth="744.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <items>
@@ -47,7 +49,7 @@
                         <content>
                           <AnchorPane prefHeight="408.0" prefWidth="353.0">
                                  <children>
-                                    <ChoiceBox fx:id="colorChoiceBox" layoutX="107.0" layoutY="82.0" prefHeight="27.0" prefWidth="176.0">
+                                    <ChoiceBox fx:id="colorChoiceBox" layoutX="116.0" layoutY="27.0" prefHeight="27.0" prefWidth="176.0">
                                         <String fx:value="8-bit" />
                                         <String fx:value="16-bit" />
                                         <String fx:value="32-bit" />
@@ -61,27 +63,55 @@
                                         <String fx:value="a*" />
                                         <String fx:value="b*" />
                                     </ChoiceBox>
-                                    <Text layoutX="23.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Color" textAlignment="CENTER" wrappingWidth="69.99999976158142">
+                                    <Text layoutX="23.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Color" textAlignment="CENTER" wrappingWidth="69.99999976158142">
                                        <font>
                                           <Font name="AdobeHebrew-Regular" size="14.0" />
                                        </font>
                                     </Text>
-                                    <Text layoutX="23.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Threshold" textAlignment="CENTER" wrappingWidth="69.99999976158142">
+                                    <Text layoutX="14.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="lowThreshold" textAlignment="CENTER" wrappingWidth="82.99999976158142">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Text>
-                                    <Text layoutX="23.0" layoutY="166.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Size" textAlignment="CENTER" wrappingWidth="69.99999976158142">
+                                    <Text layoutX="23.0" layoutY="197.0" strokeType="OUTSIDE" strokeWidth="0.0" text="lowerSize" textAlignment="CENTER" wrappingWidth="69.99999976158142">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Text>
-                                    <Text layoutX="23.0" layoutY="195.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Circularity" textAlignment="CENTER" wrappingWidth="69.99999976158142">
+                                    <Text layoutX="6.0" layoutY="278.0" strokeType="OUTSIDE" strokeWidth="0.0" text="lowerCircularity" textAlignment="CENTER" wrappingWidth="103.99999976158142">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Text>
-                                    <RangeSlider fx:id="ThresholdLevel" blockIncrement="0.0" highValue="500.0" layoutX="126.0" layoutY="125.0" lowValue="100.0" majorTickUnit="50.0" max="500.0" min="10.0" prefHeight="19.0" prefWidth="165.0" showTickLabels="true" showTickMarks="true" />
+                                    <Slider fx:id="lowThresholdSlider" layoutX="180.0" layoutY="91.0" majorTickUnit="50.0" max="420.0" prefHeight="11.0" prefWidth="167.0" showTickLabels="true" showTickMarks="true" />
+                                    <TextField fx:id="lowThreshold" layoutX="114.0" layoutY="97.0" prefHeight="27.0" prefWidth="54.0" />
+                                    <Text layoutX="6.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="upperThreshold" textAlignment="CENTER" wrappingWidth="98.99999976158142">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Text>
+                                    <Slider layoutX="180.0" layoutY="134.0" majorTickUnit="50.0" max="420.0" prefHeight="11.0" prefWidth="167.0" showTickLabels="true" showTickMarks="true" />
+                                    <TextField fx:id="upperThreshold" layoutX="114.0" layoutY="140.0" prefHeight="27.0" prefWidth="54.0" />
+                                    <Text layoutX="23.0" layoutY="238.0" strokeType="OUTSIDE" strokeWidth="0.0" text="higherSize" textAlignment="CENTER" wrappingWidth="69.99999976158142">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Text>
+                                    <Text layoutX="6.0" layoutY="318.0" strokeType="OUTSIDE" strokeWidth="0.0" text="upperCircularity" textAlignment="CENTER" wrappingWidth="103.99999976158142">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Text>
+                                    <CheckBox layoutX="192.0" layoutY="370.0" mnemonicParsing="false" text="saveOverlayMaskPics" />
+                                    <Slider layoutX="180.0" layoutY="173.0" majorTickUnit="50.0" max="420.0" prefHeight="11.0" prefWidth="167.0" showTickLabels="true" showTickMarks="true" />
+                                    <TextField fx:id="lowerSize" layoutX="114.0" layoutY="179.0" prefHeight="27.0" prefWidth="54.0" />
+                                    <Slider layoutX="180.0" layoutY="214.0" majorTickUnit="50.0" max="420.0" prefHeight="11.0" prefWidth="167.0" showTickLabels="true" showTickMarks="true" />
+                                    <TextField fx:id="higherSize" layoutX="114.0" layoutY="220.0" prefHeight="27.0" prefWidth="54.0" />
+                                    <Slider layoutX="180.0" layoutY="255.0" majorTickUnit="50.0" max="420.0" prefHeight="11.0" prefWidth="167.0" showTickLabels="true" showTickMarks="true" />
+                                    <TextField fx:id="lowerCircularity" layoutX="114.0" layoutY="260.0" prefHeight="27.0" prefWidth="54.0" />
+                                    <Slider layoutX="180.0" layoutY="294.0" majorTickUnit="50.0" max="420.0" prefHeight="11.0" prefWidth="167.0" showTickLabels="true" showTickMarks="true" />
+                                    <TextField fx:id="upperCircularity" layoutX="114.0" layoutY="299.0" prefHeight="27.0" prefWidth="54.0" />
+                                    <!--<RangeSlider fx:id="ThresholdLevel" blockIncrement="0.0" highValue="500.0" layoutX="126.0" layoutY="125.0" lowValue="100.0" majorTickUnit="50.0" max="500.0" min="10.0" prefHeight="19.0" prefWidth="165.0" showTickLabels="true" showTickMarks="true" />-->
                                  </children>
                               </AnchorPane>
                   

@@ -22,11 +22,11 @@
             <version>1.18.12</version>
             <scope>provided</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.controlsfx</groupId>-->
-<!--            <artifactId>controlsfx</artifactId>-->
-<!--            <version>11.0.1</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>11.0.1</version>
+        </dependency>
 
         <dependency>
             <groupId>net.imagej</groupId>
@@ -51,14 +51,6 @@
             <artifactId>javafx-swing</artifactId>
             <version>11</version>
         </dependency>
-
-        <dependency>
-            <groupId>no.tornado</groupId>
-            <artifactId>tornadofx-controlsfx</artifactId>
-            <version>0.1.1</version>
-        </dependency>
-
-
 
     </dependencies>
     <build>

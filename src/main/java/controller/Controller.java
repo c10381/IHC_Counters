@@ -1,5 +1,6 @@
 package controller;
 
+import com.sun.glass.events.MouseEvent;
 import ij.ImagePlus;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
@@ -8,10 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
@@ -39,8 +37,10 @@ public class Controller implements Initializable {
     @FXML private TableColumn<String, String> filePathColumn;
     @FXML private ImageView image;
     @FXML private ChoiceBox<String> colorChoiceBox;
-    @FXML private RangeSlider ThresholdLevel;
-
+    //@FXML private RangeSlider ThresholdLevel;
+    @FXML private Slider lowThresholdSlider;
+    //@FXML private Slider ThresholdLevel;
+    @FXML private TextField lowThreshold;
     /**
      * 按 addBtn 跳出選擇上傳的圖片
      */
@@ -94,51 +94,39 @@ public class Controller implements Initializable {
         }
        return image;
     }
+
     /**
     * RangeSlider initialize
     *
     * */
-    public void RangeSliderInit(){
-        ThresholdLevel.lowValueProperty().addListener(
-                new ChangeListener<Number>() {
-                    @Override
-                    public void changed(
-                            ObservableValue<? extends Number> observable,
-                            Number oldValue, Number newValue) {
-                        System.out.println(newValue);
-                     //   setValue(label1, newValue);
-                    }
-                }
-        );
+    public void SliderInit(){
 
-        ThresholdLevel.highValueProperty().addListener(
+        lowThresholdSlider.valueProperty().addListener(
                 new ChangeListener<Number>() {
                     @Override
                     public void changed(
                             ObservableValue<? extends Number> observable,
                             Number oldValue, Number newValue) {
-                        System.out.println(newValue);
-                     //   setValue(label2, newValue);
+                         setValue(lowThreshold, newValue);
                     }
-                }
-        );
+        });
 
 //        rangeSlider1.setHighValue(80.0);
 //        rangeSlider1.setLowValue(20.0);
     }
     /**
      * 在RangeSlider移動時即時顯示的方式
-     * @param label 顯示文字欄位id
+     * @param textField 顯示文字欄位id
      * @param number 移動的數字
      *
      */
-    void setValue(Label label, Number number) {
+    void setValue(TextField textField, Number number) {
         String v = String.format("%d",number.intValue());
-        label.setText(v);
+        textField.setText(v);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-//        RangeSliderInit();
+        SliderInit();
     }
 }
