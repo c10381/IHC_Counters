@@ -1,7 +1,7 @@
 package controller;
 
-import com.sun.glass.events.MouseEvent;
 import ij.ImagePlus;
+import ij.process.ImageProcessor;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -15,7 +15,6 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import models.Settings;
-import org.controlsfx.control.RangeSlider;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -75,17 +74,30 @@ public class Controller implements Initializable {
      * onMouseClicked 事件 點選上傳檔案路徑後 旁邊會顯示已選的圖檔
      */
     @FXML public void getSelectedFilePath() {
+        if(!table.getItems().isEmpty()){
         selected = table.getSelectionModel().getSelectedItem();
-        image.setImage(this.retrievePic(selected));
-        this.runAnalysis();
+            image.setImage(this.retrievePic(selected));
+        }
     }
 
     /**
      * 取得 前端設定 的資料以及所有 上傳檔案的路徑 並轉成ImagePlus格式
      */
     public void runAnalysis(){
+        System.out.println(selected);
         settings.setFilePaths(filePaths);
         var images = settings.getFilePaths().stream().map(filepath-> new ImagePlus(filepath, SwingFXUtils.fromFXImage(this.retrievePic(filepath),null))).collect(Collectors.toList());
+        images.forEach(this::analyzeImage);
+        settings.setColor(colorChoiceBox.getValue());
+        settings.setLowThresholdLevel(Double.parseDouble(lowThreshold.getText()));
+    }
+
+    private void analyzeImage(ImagePlus imagePlus){
+        ImageProcessor ip = imagePlus.getProcessor();
+        ip.setThreshold(Double.parseDouble(lowThreshold.getText()), Double.parseDouble(upperThreshold.getText()), 0);
+        System.out.println(ip.getMask());
+//        System.out.println(ip.createMask());
+
     }
 
     /**

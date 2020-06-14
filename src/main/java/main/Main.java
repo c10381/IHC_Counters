@@ -1,6 +1,5 @@
 package main;
 
-import controller.Controller;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,7 +13,6 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         FXMLLoader fxmlLoader = new FXMLLoader();
         Parent root = fxmlLoader.load(getClass().getResource("/view/main.fxml"));
-        Controller controller = fxmlLoader.getController();
         primaryStage.setTitle("IHC Counter");
         //primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.setScene(new Scene(root));
