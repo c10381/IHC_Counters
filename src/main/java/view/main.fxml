@@ -108,9 +108,9 @@
                                     <Slider fx:id="higherSizeSlider" layoutX="180.0" layoutY="214.0" majorTickUnit="200.0" max="1000.0" minorTickCount="10" prefHeight="11.0" prefWidth="167.0" showTickLabels="true" showTickMarks="true" />
                                     <TextField fx:id="higherSize" alignment="CENTER" layoutX="114.0" layoutY="220.0" prefHeight="27.0" prefWidth="54.0" text="1000" />
                                     <Slider fx:id="lowerCircularitySlider" layoutX="180.0" layoutY="255.0" majorTickUnit="0.5" max="1.0" prefHeight="11.0" prefWidth="167.0" showTickLabels="true" showTickMarks="true" />
-                                    <TextField fx:id="lowerCircularity" alignment="CENTER" layoutX="114.0" layoutY="260.0" prefHeight="27.0" prefWidth="54.0" text="0.0" />
+                                    <TextField fx:id="lowerCircularity" alignment="CENTER" layoutX="114.0" layoutY="260.0" prefHeight="27.0" prefWidth="54.0" text="0.00" />
                                     <Slider fx:id="upperCircularitySlider" layoutX="180.0" layoutY="294.0" majorTickUnit="0.5" max="1.0" prefHeight="11.0" prefWidth="167.0" showTickLabels="true" showTickMarks="true" value="1.0" />
-                                    <TextField fx:id="upperCircularity" alignment="CENTER" layoutX="114.0" layoutY="299.0" prefHeight="27.0" prefWidth="54.0" text="1.0" />
+                                    <TextField fx:id="upperCircularity" alignment="CENTER" layoutX="114.0" layoutY="299.0" prefHeight="27.0" prefWidth="54.0" text="1.00" />
                                     <!--<RangeSlider fx:id="ThresholdLevel" blockIncrement="0.0" highValue="500.0" layoutX="126.0" layoutY="125.0" lowValue="100.0" majorTickUnit="50.0" max="500.0" min="10.0" prefHeight="19.0" prefWidth="165.0" showTickLabels="true" showTickMarks="true" />-->
                                  </children>
                               </AnchorPane>

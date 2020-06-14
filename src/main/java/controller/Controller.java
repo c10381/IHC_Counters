@@ -108,24 +108,27 @@ public class Controller implements Initializable {
     *
     * */
     public void SliderInit(){
-        lowThresholdSlider.valueProperty().addListener(setValue(lowThreshold));
-        upperThresholdSilder.valueProperty().addListener(setValue(upperThreshold));
-        lowerSizeSlider.valueProperty().addListener(setValue(lowerSize));
-        higherSizeSlider.valueProperty().addListener(setValue(higherSize));
-        lowerCircularitySlider.valueProperty().addListener(setValue(lowerCircularity));
-        upperCircularitySlider.valueProperty().addListener(setValue(upperCircularity));
+        lowThresholdSlider.valueProperty().addListener(setValue(lowThreshold,true));
+        upperThresholdSilder.valueProperty().addListener(setValue(upperThreshold,true));
+        lowerSizeSlider.valueProperty().addListener(setValue(lowerSize,true));
+        higherSizeSlider.valueProperty().addListener(setValue(higherSize,true));
+        lowerCircularitySlider.valueProperty().addListener(setValue(lowerCircularity,false));
+        upperCircularitySlider.valueProperty().addListener(setValue(upperCircularity,false));
     }
     /**
      * Slider ChangeListener
      * @param textField 顯示文字欄位id
      * */
-    ChangeListener<Number> setValue(TextField textField) {
+    ChangeListener<Number> setValue(TextField textField ,Boolean integer) {
         return new ChangeListener<Number>() {
             @Override
             public void changed(
                     ObservableValue<? extends Number> observable,
                     Number oldValue, Number newValue) {
                 String v = String.format("%d", newValue.intValue());
+                if(!integer){
+                    v=String.format("%.2f", newValue.doubleValue());
+                }
                 textField.setText(v);
             }
         };
