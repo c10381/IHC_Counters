@@ -2,21 +2,22 @@ package controller;
 
 import ij.ImagePlus;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import models.Settings;
+import org.controlsfx.control.RangeSlider;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,6 +39,7 @@ public class Controller implements Initializable {
     @FXML private TableColumn<String, String> filePathColumn;
     @FXML private ImageView image;
     @FXML private ChoiceBox<String> colorChoiceBox;
+    @FXML private RangeSlider ThresholdLevel;
 
     /**
      * 按 addBtn 跳出選擇上傳的圖片
@@ -92,9 +94,51 @@ public class Controller implements Initializable {
         }
        return image;
     }
+    /**
+    * RangeSlider initialize
+    *
+    * */
+    public void RangeSliderInit(){
+        ThresholdLevel.lowValueProperty().addListener(
+                new ChangeListener<Number>() {
+                    @Override
+                    public void changed(
+                            ObservableValue<? extends Number> observable,
+                            Number oldValue, Number newValue) {
+                        System.out.println(newValue);
+                     //   setValue(label1, newValue);
+                    }
+                }
+        );
+
+        ThresholdLevel.highValueProperty().addListener(
+                new ChangeListener<Number>() {
+                    @Override
+                    public void changed(
+                            ObservableValue<? extends Number> observable,
+                            Number oldValue, Number newValue) {
+                        System.out.println(newValue);
+                     //   setValue(label2, newValue);
+                    }
+                }
+        );
+
+//        rangeSlider1.setHighValue(80.0);
+//        rangeSlider1.setLowValue(20.0);
+    }
+    /**
+     * 在RangeSlider移動時即時顯示的方式
+     * @param label 顯示文字欄位id
+     * @param number 移動的數字
+     *
+     */
+    void setValue(Label label, Number number) {
+        String v = String.format("%d",number.intValue());
+        label.setText(v);
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+//        RangeSliderInit();
     }
 }
