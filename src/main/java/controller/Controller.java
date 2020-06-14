@@ -37,10 +37,18 @@ public class Controller implements Initializable {
     @FXML private TableColumn<String, String> filePathColumn;
     @FXML private ImageView image;
     @FXML private ChoiceBox<String> colorChoiceBox;
-    //@FXML private RangeSlider ThresholdLevel;
     @FXML private Slider lowThresholdSlider;
-    //@FXML private Slider ThresholdLevel;
+    @FXML private Slider upperThresholdSilder;
+    @FXML private Slider lowerSizeSlider;
+    @FXML private Slider higherSizeSlider;
+    @FXML private Slider lowerCircularitySlider;
+    @FXML private Slider upperCircularitySlider;
     @FXML private TextField lowThreshold;
+    @FXML private TextField upperThreshold;
+    @FXML private TextField lowerSize;
+    @FXML private TextField higherSize;
+    @FXML private TextField lowerCircularity;
+    @FXML private TextField upperCircularity;
     /**
      * 按 addBtn 跳出選擇上傳的圖片
      */
@@ -96,34 +104,33 @@ public class Controller implements Initializable {
     }
 
     /**
-    * RangeSlider initialize
+    * Slider initialize
     *
     * */
     public void SliderInit(){
-
-        lowThresholdSlider.valueProperty().addListener(
-                new ChangeListener<Number>() {
-                    @Override
-                    public void changed(
-                            ObservableValue<? extends Number> observable,
-                            Number oldValue, Number newValue) {
-                         setValue(lowThreshold, newValue);
-                    }
-        });
-
-//        rangeSlider1.setHighValue(80.0);
-//        rangeSlider1.setLowValue(20.0);
+        lowThresholdSlider.valueProperty().addListener(setValue(lowThreshold));
+        upperThresholdSilder.valueProperty().addListener(setValue(upperThreshold));
+        lowerSizeSlider.valueProperty().addListener(setValue(lowerSize));
+        higherSizeSlider.valueProperty().addListener(setValue(higherSize));
+        lowerCircularitySlider.valueProperty().addListener(setValue(lowerCircularity));
+        upperCircularitySlider.valueProperty().addListener(setValue(upperCircularity));
     }
     /**
-     * 在RangeSlider移動時即時顯示的方式
+     * Slider ChangeListener
      * @param textField 顯示文字欄位id
-     * @param number 移動的數字
-     *
-     */
-    void setValue(TextField textField, Number number) {
-        String v = String.format("%d",number.intValue());
-        textField.setText(v);
+     * */
+    ChangeListener<Number> setValue(TextField textField) {
+        return new ChangeListener<Number>() {
+            @Override
+            public void changed(
+                    ObservableValue<? extends Number> observable,
+                    Number oldValue, Number newValue) {
+                String v = String.format("%d", newValue.intValue());
+                textField.setText(v);
+            }
+        };
     }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
