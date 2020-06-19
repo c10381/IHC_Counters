@@ -1,6 +1,10 @@
 package controller;
 
 import ij.ImagePlus;
+import ij.measure.Measurements;
+import ij.measure.ResultsTable;
+import ij.plugin.filter.ParticleAnalyzer;
+import ij.process.ImageConverter;
 import ij.process.ImageProcessor;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
@@ -81,23 +85,37 @@ public class Controller implements Initializable {
     }
 
     /**
-     * 取得 前端設定 的資料以及所有 上傳檔案的路徑 並轉成ImagePlus格式
+     * onAction 按 開始分析 取得 前端設定 的資料以及所有 上傳檔案的路徑 並轉成ImagePlus格式
      */
     public void runAnalysis(){
-        System.out.println(selected);
         settings.setFilePaths(filePaths);
+        //若有一堆圖要分析 目前 button按了只會分析選的那張圖
+        //可以思考把Settings.class刪除 沒有用到
         var images = settings.getFilePaths().stream().map(filepath-> new ImagePlus(filepath, SwingFXUtils.fromFXImage(this.retrievePic(filepath),null))).collect(Collectors.toList());
-        images.forEach(this::analyzeImage);
-        settings.setColor(colorChoiceBox.getValue());
-        settings.setLowThresholdLevel(Double.parseDouble(lowThreshold.getText()));
+        analyzeImage(images.get(0));
     }
 
+    /**
+     * 分析圖片 吐出分析後照
+     * @param imagePlus
+     */
     private void analyzeImage(ImagePlus imagePlus){
+        ImageConverter imageConverter = new ImageConverter(imagePlus);
+        //改顏色 --> 需要寫活
+        imageConverter.convertToGray8();
         ImageProcessor ip = imagePlus.getProcessor();
-        ip.setThreshold(Double.parseDouble(lowThreshold.getText()), Double.parseDouble(upperThreshold.getText()), 0);
-        System.out.println(ip.getMask());
-//        System.out.println(ip.createMask());
-
+        ip.setThreshold(Double.parseDouble(lowThreshold.getText()), Double.parseDouble(upperThreshold.getText()), ip.getLutUpdateMode());
+        ResultsTable rt = new ResultsTable();
+        //ParticleAnalyzer.SHOW_MASKS --> 顯示圖片 一塊一塊黑
+        //ParticleAnalyzer.SHOW_OUTLINES --> 顯示圖片 圈起來
+        //ParticleAnalyzer.SHOW_ROI_MASKS --> 好問題還沒跑過
+        ParticleAnalyzer pa = new ParticleAnalyzer(ParticleAnalyzer.SHOW_OUTLINES, Measurements.PERIMETER, rt,
+            Double.parseDouble(lowerSize.getText()), Double.parseDouble(higherSize.getText()), Double.parseDouble(lowerCircularity.getText()), Double.parseDouble(upperCircularity.getText()));
+        //不要圖片跳出來
+        pa.setHideOutputImage(true);
+        pa.analyze(imagePlus, ip);
+        //
+        image.setImage(SwingFXUtils.toFXImage(pa.getOutputImage().getBufferedImage(), null));
     }
 
     /**
