@@ -4,6 +4,8 @@ import ij.ImagePlus;
 import ij.measure.Measurements;
 import ij.measure.ResultsTable;
 import ij.plugin.filter.ParticleAnalyzer;
+import ij.process.ColorSpaceConverter;
+import ij.process.FloatProcessor;
 import ij.process.ImageConverter;
 import ij.process.ImageProcessor;
 import javafx.beans.property.SimpleStringProperty;
@@ -20,11 +22,13 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import models.Settings;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -100,22 +104,27 @@ public class Controller implements Initializable {
      * @param imagePlus
      */
     private void analyzeImage(ImagePlus imagePlus){
-        ImageConverter imageConverter = new ImageConverter(imagePlus);
+//        ImageConverter imageConverter = new ImageConverter(imagePlus);
         //改顏色 --> 需要寫活
-        imageConverter.convertToGray8();
-        ImageProcessor ip = imagePlus.getProcessor();
+//        imageConverter.convertToLab();
+        ColorSpaceConverter converter = new ColorSpaceConverter();
+//        ImagePlus imp2 = converter.RGBToLab(imagePlus);
+        FloatProcessor ip = (FloatProcessor) converter.RGBToLab(imagePlus).getStack().getProcessor(2);
+        var x = (BufferedImage) ip.createImage();
+//        ImageProcessor ip = imagePlus.getProcessor();
         ip.setThreshold(Double.parseDouble(lowThreshold.getText()), Double.parseDouble(upperThreshold.getText()), ip.getLutUpdateMode());
         ResultsTable rt = new ResultsTable();
         //ParticleAnalyzer.SHOW_MASKS --> 顯示圖片 一塊一塊黑
         //ParticleAnalyzer.SHOW_OUTLINES --> 顯示圖片 圈起來
         //ParticleAnalyzer.SHOW_ROI_MASKS --> 好問題還沒跑過
-        ParticleAnalyzer pa = new ParticleAnalyzer(ParticleAnalyzer.SHOW_OUTLINES, Measurements.PERIMETER, rt,
+        ParticleAnalyzer pa = new ParticleAnalyzer(ParticleAnalyzer.SHOW_OVERLAY_MASKS, Measurements.PERIMETER, rt,
             Double.parseDouble(lowerSize.getText()), Double.parseDouble(higherSize.getText()), Double.parseDouble(lowerCircularity.getText()), Double.parseDouble(upperCircularity.getText()));
         //不要圖片跳出來
-        pa.setHideOutputImage(true);
-        pa.analyze(imagePlus, ip);
+//        pa.setHideOutputImage(true);
+//        pa.analyze(imagePlus, ip);
         //
-        image.setImage(SwingFXUtils.toFXImage(pa.getOutputImage().getBufferedImage(), null));
+//        image.setImage(SwingFXUtils.toFXImage(pa.getOutputImage().getBufferedImage(), null));
+        image.setImage(SwingFXUtils.toFXImage(x, null));
     }
 
     /**
