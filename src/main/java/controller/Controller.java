@@ -105,20 +105,21 @@ public class Controller implements Initializable {
         ImageConverter imageConverter = new ImageConverter(imagePlus);
         ColorSpaceConverter colorSpaceConverter = new ColorSpaceConverter();
         ColorProcessor colorProcessor = new ColorProcessor(imagePlus.getBufferedImage());
-        ImageProcessor imageProcessor = imagePlus.getProcessor();
+        ImageProcessor imageProcessor =null;
         //顏色分析
         System.out.println(imagePlus);
         switch(colorChoiceBox.getValue()){
             case "8-bit":
-                imageConverter = new ImageConverter(imagePlus);
                 imageConverter.convertToGray8();
+                imageProcessor = imagePlus.getProcessor();
                 break;
             case "16-bit":
-                imageConverter = new ImageConverter(imagePlus);
                 imageConverter.convertToGray16();
+                imageProcessor = imagePlus.getProcessor();
                 break;
             case "32-bit":
                 imageConverter.convertToGray32();
+                imageProcessor = imagePlus.getProcessor();
                 break;
             case "Red":
                 imageConverter.convertToRGBStack();
