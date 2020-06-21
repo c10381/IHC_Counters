@@ -4,10 +4,7 @@ import ij.ImagePlus;
 import ij.measure.Measurements;
 import ij.measure.ResultsTable;
 import ij.plugin.filter.ParticleAnalyzer;
-import ij.process.ColorSpaceConverter;
-import ij.process.FloatProcessor;
-import ij.process.ImageConverter;
-import ij.process.ImageProcessor;
+import ij.process.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -104,27 +101,73 @@ public class Controller implements Initializable {
      * @param imagePlus
      */
     private void analyzeImage(ImagePlus imagePlus){
-//        ImageConverter imageConverter = new ImageConverter(imagePlus);
-        //改顏色 --> 需要寫活
-//        imageConverter.convertToLab();
-        ColorSpaceConverter converter = new ColorSpaceConverter();
-//        ImagePlus imp2 = converter.RGBToLab(imagePlus);
-        FloatProcessor ip = (FloatProcessor) converter.RGBToLab(imagePlus).getStack().getProcessor(2);
-        var x = (BufferedImage) ip.createImage();
-//        ImageProcessor ip = imagePlus.getProcessor();
-        ip.setThreshold(Double.parseDouble(lowThreshold.getText()), Double.parseDouble(upperThreshold.getText()), ip.getLutUpdateMode());
+        System.out.println(colorChoiceBox.getValue());
+        ImageConverter imageConverter = new ImageConverter(imagePlus);
+        ColorSpaceConverter colorSpaceConverter = new ColorSpaceConverter();
+        ColorProcessor colorProcessor = new ColorProcessor(imagePlus.getBufferedImage());
+        ImageProcessor imageProcessor = imagePlus.getProcessor();
+        //顏色分析
+        System.out.println(imagePlus);
+        switch(colorChoiceBox.getValue()){
+            case "8-bit":
+                imageConverter = new ImageConverter(imagePlus);
+                imageConverter.convertToGray8();
+                break;
+            case "16-bit":
+                imageConverter = new ImageConverter(imagePlus);
+                imageConverter.convertToGray16();
+                break;
+            case "32-bit":
+                imageConverter.convertToGray32();
+                break;
+            case "Red":
+                imageConverter.convertToRGBStack();
+                imageProcessor = imagePlus.getStack().getProcessor(1);
+                break;
+            case "Green":
+                imageConverter.convertToRGBStack();
+                imageProcessor = imagePlus.getStack().getProcessor(2);
+                break;
+            case "Blue":
+                imageConverter.convertToRGBStack();
+                imageProcessor = imagePlus.getStack().getProcessor(3);
+                break;
+            case "Hue":
+                imageProcessor = colorProcessor.getHSBStack().getProcessor(1);
+                break;
+            case "Saturation":
+                imageProcessor = colorProcessor.getHSBStack().getProcessor(2);
+                break;
+            case "Brightness":
+                imageProcessor = colorProcessor.getHSBStack().getProcessor(3);
+                break;
+            case "L*":
+                imageProcessor = colorSpaceConverter.RGBToLab(imagePlus).getStack().getProcessor(1);
+                break;
+            case "a*":
+                imageProcessor = colorSpaceConverter.RGBToLab(imagePlus).getStack().getProcessor(2);
+                break;
+            case "b*":
+                imageProcessor = colorSpaceConverter.RGBToLab(imagePlus).getStack().getProcessor(3);
+                break;
+        }
+
+        imageProcessor.setThreshold(Double.parseDouble(lowThreshold.getText()), Double.parseDouble(upperThreshold.getText()), imageProcessor.getLutUpdateMode());
         ResultsTable rt = new ResultsTable();
+        var imgAfterColorChange = new ImagePlus(imagePlus.getTitle(), imageProcessor);
+        System.out.println(imagePlus);
         //ParticleAnalyzer.SHOW_MASKS --> 顯示圖片 一塊一塊黑
         //ParticleAnalyzer.SHOW_OUTLINES --> 顯示圖片 圈起來
         //ParticleAnalyzer.SHOW_ROI_MASKS --> 好問題還沒跑過
-        ParticleAnalyzer pa = new ParticleAnalyzer(ParticleAnalyzer.SHOW_OVERLAY_MASKS, Measurements.PERIMETER, rt,
+        ParticleAnalyzer pa = new ParticleAnalyzer(ParticleAnalyzer.SHOW_MASKS, Measurements.PERIMETER, rt,
             Double.parseDouble(lowerSize.getText()), Double.parseDouble(higherSize.getText()), Double.parseDouble(lowerCircularity.getText()), Double.parseDouble(upperCircularity.getText()));
         //不要圖片跳出來
 //        pa.setHideOutputImage(true);
-//        pa.analyze(imagePlus, ip);
-        //
+        pa.analyze(imgAfterColorChange);
+        System.out.println(rt.getCounter());
+
 //        image.setImage(SwingFXUtils.toFXImage(pa.getOutputImage().getBufferedImage(), null));
-        image.setImage(SwingFXUtils.toFXImage(x, null));
+        image.setImage(SwingFXUtils.toFXImage(pa.getOutputImage().getBufferedImage(), null));
     }
 
     /**
