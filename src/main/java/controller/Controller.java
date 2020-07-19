@@ -4,7 +4,10 @@ import ij.ImagePlus;
 import ij.measure.Measurements;
 import ij.measure.ResultsTable;
 import ij.plugin.filter.ParticleAnalyzer;
-import ij.process.*;
+import ij.process.ColorProcessor;
+import ij.process.ColorSpaceConverter;
+import ij.process.ImageConverter;
+import ij.process.ImageProcessor;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -13,21 +16,22 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import models.Settings;
-//import org.controlsfx.control.RangeSlider;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+
+//import org.controlsfx.control.RangeSlider;
 
 public class Controller implements Initializable {
 
@@ -94,20 +98,6 @@ public class Controller implements Initializable {
         //可以思考把Settings.class刪除 沒有用到
         var images = settings.getFilePaths().stream().map(filepath-> new ImagePlus(filepath, SwingFXUtils.fromFXImage(this.retrievePic(filepath),null))).collect(Collectors.toList());
         analyzeImage(images.get(0));
-        var map = new HashMap<String,Integer>();
-        map.put("z", 10);
-        map.put("b", 5);
-        map.put("a", 6);
-        map.put("c", 20);
-        map.put("d", 1);
-        map.put("e", 7);
-        map.put("y", 8);
-        map.put("n", 99);
-        map.put("g", 50);
-        map.put("m", 2);
-        var mapper = map.entrySet().stream().sorted(Map.Entry.comparingByKey())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     }
 
     /**
@@ -185,7 +175,7 @@ public class Controller implements Initializable {
         ParticleAnalyzer pa = new ParticleAnalyzer(ParticleAnalyzer.SHOW_MASKS, Measurements.PERIMETER, rt,
             Double.parseDouble(lowerSize.getText()), Double.parseDouble(higherSize.getText()), Double.parseDouble(lowerCircularity.getText()), Double.parseDouble(upperCircularity.getText()));
         //不要圖片跳出來
-//        pa.setHideOutputImage(true);
+        pa.setHideOutputImage(true);
         pa.analyze(imagePlus, imageProcessor);
         System.out.println(rt.getCounter());
 
@@ -234,6 +224,7 @@ public class Controller implements Initializable {
                     v=String.format("%.2f", newValue.doubleValue());
                 }
                 textField.setText(v);
+                runAnalysis();
             }
         };
     }
