@@ -17,8 +17,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<!--<?import org.controlsfx.control.RangeSlider?>-->
 
+<!--<?import org.controlsfx.control.RangeSlider?>-->
 
 <ToolBar prefHeight="455.0" prefWidth="744.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <items>
@@ -51,7 +51,7 @@
                         <content>
                           <AnchorPane prefHeight="408.0" prefWidth="353.0">
                                  <children>
-                                    <ChoiceBox fx:id="colorChoiceBox" layoutX="116.0" layoutY="27.0" prefHeight="27.0" prefWidth="176.0" onAction="#runAnalysis">
+                                    <ChoiceBox fx:id="colorChoiceBox" layoutX="116.0" layoutY="27.0" onAction="#runAnalysis" prefHeight="27.0" prefWidth="176.0">
                                         <String fx:value="8-bit" />
                                         <String fx:value="16-bit" />
                                         <String fx:value="32-bit" />
@@ -125,8 +125,9 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="359.0" prefWidth="360.0">
                <children>
-                  <ImageView fx:id="image" fitHeight="230.0" fitWidth="333.0" layoutX="14.0" layoutY="38.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" />
-                  <Button layoutX="280.0" layoutY="408.0" mnemonicParsing="false" text="開始分析" onAction="#runAnalysis"/>
+                  <ImageView fx:id="Beforeimage" fitHeight="196.0" fitWidth="284.0" layoutX="38.0" layoutY="14.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="14.0" />
+                  <Button layoutX="280.0" layoutY="408.0" mnemonicParsing="false" onAction="#runAnalysis" text="開始分析" />
+                  <ImageView fx:id="Afterimage" fitHeight="196.0" fitWidth="284.0" layoutX="38.0" layoutY="210.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" />
                </children>
             </AnchorPane>
         </items>
