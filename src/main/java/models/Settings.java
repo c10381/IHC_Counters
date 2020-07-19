@@ -26,6 +26,6 @@ public class Settings {
     Double upperCircularity;
     Boolean saveOverlayMaskPics;
     List<String> filePaths;
-    String outputPath;
+    String savePathText;
 
 }
