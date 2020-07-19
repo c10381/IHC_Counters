@@ -125,9 +125,9 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="359.0" prefWidth="360.0">
                <children>
-                  <ImageView fx:id="Beforeimage" fitHeight="196.0" fitWidth="284.0" layoutX="38.0" layoutY="14.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="14.0" />
+                  <ImageView fx:id="beforeImage" fitHeight="196.0" fitWidth="284.0" layoutX="38.0" layoutY="14.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="14.0" />
                   <Button layoutX="280.0" layoutY="408.0" mnemonicParsing="false" onAction="#runAnalysis" text="開始分析" />
-                  <ImageView fx:id="Afterimage" fitHeight="196.0" fitWidth="284.0" layoutX="38.0" layoutY="210.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="afterImage" fitHeight="196.0" fitWidth="284.0" layoutX="38.0" layoutY="210.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true" />
                </children>
             </AnchorPane>
         </items>

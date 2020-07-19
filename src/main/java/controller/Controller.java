@@ -21,8 +21,6 @@ import javafx.stage.Stage;
 import models.Settings;
 //import org.controlsfx.control.RangeSlider;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -40,9 +38,9 @@ public class Controller implements Initializable {
 
     @FXML private TableView<String> table;
     @FXML private TableColumn<String, String> filePathColumn;
-    @FXML private ImageView image;
+    @FXML private ImageView beforeImage;
+    @FXML private ImageView afterImage;
     @FXML private ChoiceBox<String> colorChoiceBox;
-//    @FXML private RangeSlider ThresholdSlider;
     @FXML private Slider lowThresholdSlider;
     @FXML private Slider upperThresholdSilder;
     @FXML private Slider lowerSizeSlider;
@@ -83,7 +81,7 @@ public class Controller implements Initializable {
     @FXML public void getSelectedFilePath() {
         if(!table.getItems().isEmpty()){
         selected = table.getSelectionModel().getSelectedItem();
-            image.setImage(this.retrievePic(selected));
+            beforeImage.setImage(this.retrievePic(selected));
         }
     }
 
@@ -180,7 +178,6 @@ public class Controller implements Initializable {
 
         imageProcessor.setThreshold(Double.parseDouble(lowThreshold.getText()), Double.parseDouble(upperThreshold.getText()), imageProcessor.getLutUpdateMode());
         ResultsTable rt = new ResultsTable();
-        var imgAfterColorChange = new ImagePlus(imagePlus.getTitle(), imageProcessor);
         System.out.println(imagePlus);
         //ParticleAnalyzer.SHOW_MASKS --> 顯示圖片 一塊一塊黑
         //ParticleAnalyzer.SHOW_OUTLINES --> 顯示圖片 圈起來
@@ -189,11 +186,10 @@ public class Controller implements Initializable {
             Double.parseDouble(lowerSize.getText()), Double.parseDouble(higherSize.getText()), Double.parseDouble(lowerCircularity.getText()), Double.parseDouble(upperCircularity.getText()));
         //不要圖片跳出來
 //        pa.setHideOutputImage(true);
-        pa.analyze(imgAfterColorChange);
+        pa.analyze(imagePlus, imageProcessor);
         System.out.println(rt.getCounter());
 
-//        image.setImage(SwingFXUtils.toFXImage(pa.getOutputImage().getBufferedImage(), null));
-        image.setImage(SwingFXUtils.toFXImage(pa.getOutputImage().getBufferedImage(), null));
+        afterImage.setImage(SwingFXUtils.toFXImage(pa.getOutputImage().getBufferedImage(), null));
     }
 
     /**
