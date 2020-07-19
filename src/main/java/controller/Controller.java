@@ -13,21 +13,22 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import models.Settings;
+//import org.controlsfx.control.RangeSlider;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class Controller implements Initializable {
@@ -41,6 +42,7 @@ public class Controller implements Initializable {
     @FXML private TableColumn<String, String> filePathColumn;
     @FXML private ImageView image;
     @FXML private ChoiceBox<String> colorChoiceBox;
+//    @FXML private RangeSlider ThresholdSlider;
     @FXML private Slider lowThresholdSlider;
     @FXML private Slider upperThresholdSilder;
     @FXML private Slider lowerSizeSlider;
@@ -94,6 +96,20 @@ public class Controller implements Initializable {
         //可以思考把Settings.class刪除 沒有用到
         var images = settings.getFilePaths().stream().map(filepath-> new ImagePlus(filepath, SwingFXUtils.fromFXImage(this.retrievePic(filepath),null))).collect(Collectors.toList());
         analyzeImage(images.get(0));
+        var map = new HashMap<String,Integer>();
+        map.put("z", 10);
+        map.put("b", 5);
+        map.put("a", 6);
+        map.put("c", 20);
+        map.put("d", 1);
+        map.put("e", 7);
+        map.put("y", 8);
+        map.put("n", 99);
+        map.put("g", 50);
+        map.put("m", 2);
+        var mapper = map.entrySet().stream().sorted(Map.Entry.comparingByKey())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     }
 
     /**
@@ -143,13 +159,22 @@ public class Controller implements Initializable {
                 imageProcessor = colorProcessor.getHSBStack().getProcessor(3);
                 break;
             case "L*":
-                imageProcessor = colorSpaceConverter.RGBToLab(imagePlus).getStack().getProcessor(1);
+                //imageProcessor = colorSpaceConverter.RGBToLab(imagePlus).getStack().getProcessor(1);
+                imageConverter.convertToLab();
+                imageProcessor = imagePlus.getImageStack().getProcessor(1);
+                imageConverter.convertToGray8();
                 break;
             case "a*":
-                imageProcessor = colorSpaceConverter.RGBToLab(imagePlus).getStack().getProcessor(2);
+                //imageProcessor = colorSpaceConverter.RGBToLab(imagePlus).getStack().getProcessor(2);
+                imageConverter.convertToLab();
+                imageProcessor = imagePlus.getImageStack().getProcessor(2);
+                imageConverter.convertToGray8();
                 break;
             case "b*":
-                imageProcessor = colorSpaceConverter.RGBToLab(imagePlus).getStack().getProcessor(3);
+                //imageProcessor = colorSpaceConverter.RGBToLab(imagePlus).getStack().getProcessor(3);
+                imageConverter.convertToLab();
+                imageProcessor = imagePlus.getImageStack().getProcessor(3);
+                imageConverter.convertToGray8();
                 break;
         }
 

@@ -17,6 +17,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<!--<?import org.controlsfx.control.RangeSlider?>-->
+
 
 <ToolBar prefHeight="455.0" prefWidth="744.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <items>
@@ -111,7 +113,7 @@
                                     <TextField fx:id="lowerCircularity" alignment="CENTER" layoutX="114.0" layoutY="260.0" prefHeight="27.0" prefWidth="54.0" text="0.00" />
                                     <Slider fx:id="upperCircularitySlider" layoutX="180.0" layoutY="294.0" majorTickUnit="0.5" max="1.0" prefHeight="11.0" prefWidth="167.0" showTickLabels="true" showTickMarks="true" value="1.0" />
                                     <TextField fx:id="upperCircularity" alignment="CENTER" layoutX="114.0" layoutY="299.0" prefHeight="27.0" prefWidth="54.0" text="1.00" />
-                                    <!--<RangeSlider fx:id="ThresholdLevel" blockIncrement="0.0" highValue="500.0" layoutX="126.0" layoutY="125.0" lowValue="100.0" majorTickUnit="50.0" max="500.0" min="10.0" prefHeight="19.0" prefWidth="165.0" showTickLabels="true" showTickMarks="true" />-->
+                                    <!--<RangeSlider fx:id="ThresholdLevel"/>-->
                                  </children>
                               </AnchorPane>
                   
