@@ -3,6 +3,7 @@ package controller;
 import ij.ImagePlus;
 import ij.measure.Measurements;
 import ij.measure.ResultsTable;
+import ij.plugin.filter.Analyzer;
 import ij.plugin.filter.ParticleAnalyzer;
 import ij.process.ColorProcessor;
 import ij.process.ColorSpaceConverter;
@@ -92,11 +93,12 @@ public class Controller implements Initializable {
      * onMouseClicked 事件 點選上傳檔案路徑後 旁邊會顯示已選的圖檔
      */
     @FXML public void getSelectedFilePath() {
-        if(!table.getItems().isEmpty()){
+        if(!table.getItems().isEmpty()
+                && table.getSelectionModel().getSelectedItem() != null){
             //選擇圖片路徑
         selected = table.getSelectionModel().getSelectedItem();
             beforeImage.setImage(this.retrievePic(selected));
-            if(settings.getColor() != null){
+            if(colorChoiceBox.getValue() != null){
                 analyzeImage(new ImagePlus(selected, SwingFXUtils.fromFXImage(beforeImage.getImage(),null)));
             }
             zoomIn(beforeImage, afterImage);
@@ -168,21 +170,12 @@ public class Controller implements Initializable {
                 break;
             case "L*":
                 imageProcessor = colorSpaceConverter.RGBToLab(imagePlus).getStack().getProcessor(1);
-//                imageConverter.convertToLab();
-//                imageProcessor = imagePlus.getImageStack().getProcessor(1);
-                imageConverter.convertToGray8();
                 break;
             case "a*":
                 imageProcessor = colorSpaceConverter.RGBToLab(imagePlus).getStack().getProcessor(2);
-//                imageConverter.convertToLab();
-//                imageProcessor = imagePlus.getImageStack().getProcessor(2);
-                imageConverter.convertToGray8();
                 break;
             case "b*":
                 imageProcessor = colorSpaceConverter.RGBToLab(imagePlus).getStack().getProcessor(3);
-//                imageConverter.convertToLab();
-//                imageProcessor = imagePlus.getImageStack().getProcessor(3);
-                imageConverter.convertToGray8();
                 break;
         }
 
@@ -191,7 +184,7 @@ public class Controller implements Initializable {
         //ParticleAnalyzer.SHOW_MASKS --> 顯示圖片 一塊一塊黑
         //ParticleAnalyzer.SHOW_OUTLINES --> 顯示圖片 圈起來
         //ParticleAnalyzer.SHOW_ROI_MASKS --> 好問題還沒跑過
-        ParticleAnalyzer pa = new ParticleAnalyzer(ParticleAnalyzer.SHOW_MASKS, Measurements.PERIMETER, rt,
+        ParticleAnalyzer pa = new ParticleAnalyzer(ParticleAnalyzer.SHOW_ROI_MASKS, Measurements.PERIMETER, rt,
             Double.parseDouble(lowerSize.getText()), Double.parseDouble(higherSize.getText()), Double.parseDouble(lowerCircularity.getText()), Double.parseDouble(upperCircularity.getText()));
         //不要圖片跳出來
         pa.setHideOutputImage(true);
@@ -199,13 +192,6 @@ public class Controller implements Initializable {
         System.out.println(rt.getCounter());
         afterImage.setImage(SwingFXUtils.toFXImage(pa.getOutputImage().getBufferedImage(), null));
         //儲存設定值
-        settings.setColor(colorChoiceBox.getValue());
-        settings.setLowThresholdLevel(Double.parseDouble(lowThreshold.getText()));
-        settings.setUpperThresholdLevel(Double.parseDouble(upperThreshold.getText()));
-        settings.setLowerCircularity(Double.parseDouble(lowerCircularity.getText()));
-        settings.setUpperCircularity(Double.parseDouble(upperCircularity.getText()));
-        settings.setLowerSize(Double.parseDouble(lowerSize.getText()));
-        settings.setHigherSize(Double.parseDouble(higherSize.getText()));
         zoomIn(afterImage, beforeImage);
     }
 
