@@ -95,7 +95,7 @@ public class Controller implements Initializable {
         if(!table.getItems().isEmpty()){
         selected = table.getSelectionModel().getSelectedItem();
             beforeImage.setImage(this.retrievePic(selected));
-            zoomIn(beforeImage);
+            zoomIn(beforeImage, afterImage);
         }
     }
 
@@ -190,7 +190,7 @@ public class Controller implements Initializable {
         System.out.println(rt.getCounter());
 
         afterImage.setImage(SwingFXUtils.toFXImage(pa.getOutputImage().getBufferedImage(), null));
-        zoomIn(afterImage);
+        zoomIn(afterImage, beforeImage);
     }
 
     /**
@@ -210,34 +210,35 @@ public class Controller implements Initializable {
 
     /**
      * 放大縮小照片
-     * @param imageView
+     * @param imageView1
      */
-    private void zoomIn(ImageView imageView){
+    private void zoomIn(ImageView imageView1, ImageView imageView2){
+        System.out.println("AAAAAAAAAA " + imageView1);
         final int MIN_PIXELS = 10;
-        double width = imageView.getImage().getWidth();
-        double height = imageView.getImage().getHeight();
+        double width = imageView1.getImage().getWidth();
+        double height = imageView1.getImage().getHeight();
 
-        imageView.setPreserveRatio(true);
-        reset(this.beforeImage, width / 2, height / 2);
+        imageView1.setPreserveRatio(true);
+        reset(imageView1, width / 2, height / 2);
 
         ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
 
-        imageView.setOnMousePressed(e -> {
+        imageView1.setOnMousePressed(e -> {
 
-            Point2D mousePress = imageViewToImage(imageView, new Point2D(e.getX(), e.getY()));
+            Point2D mousePress = imageViewToImage(imageView1, new Point2D(e.getX(), e.getY()));
             mouseDown.set(mousePress);
         });
 
-        imageView.setOnMouseDragged(e -> {
-            Point2D dragPoint = imageViewToImage(imageView, new Point2D(e.getX(), e.getY()));
-            shift(imageView, dragPoint.subtract(mouseDown.get()));
-            mouseDown.set(imageViewToImage(this.beforeImage, new Point2D(e.getX(), e.getY())));
+        imageView1.setOnMouseDragged(e -> {
+            Point2D dragPoint = imageViewToImage(imageView1, new Point2D(e.getX(), e.getY()));
+            shift(imageView1, imageView2, dragPoint.subtract(mouseDown.get()));
+            mouseDown.set(imageViewToImage(imageView1, new Point2D(e.getX(), e.getY())));
         });
 
-        this.beforeImage.setOnScroll(e -> {
+        imageView1.setOnScroll(e -> {
             double delta = e.getDeltaY();
-            Rectangle2D viewport = this.beforeImage.getViewport();
-
+            Rectangle2D viewport = imageView1.getViewport();
+            System.out.println(viewport);
             double scale = clamp(Math.pow(1.01, delta),
 
                     // don't scale so we're zoomed in to fewer than MIN_PIXELS in any direction:
@@ -248,7 +249,7 @@ public class Controller implements Initializable {
 
             );
 
-            Point2D mouse = imageViewToImage(this.beforeImage, new Point2D(e.getX(), e.getY()));
+            Point2D mouse = imageViewToImage(imageView1, new Point2D(e.getX(), e.getY()));
 
             double newWidth = viewport.getWidth() * scale;
             double newHeight = viewport.getHeight() * scale;
@@ -269,12 +270,14 @@ public class Controller implements Initializable {
             double newMinY = clamp(mouse.getY() - (mouse.getY() - viewport.getMinY()) * scale,
                     0, height - newHeight);
 
-            this.beforeImage.setViewport(new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
+            imageView1.setViewport(new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
+            imageView2.setViewport(new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
         });
 
-        this.beforeImage.setOnMouseClicked(e -> {
+        imageView1.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) {
-                reset(this.beforeImage, width, height);
+                reset(imageView1, width, height);
+                reset(imageView2, width, height);
             }
         });
     }
@@ -286,7 +289,7 @@ public class Controller implements Initializable {
 
     // shift the viewport of the imageView by the specified delta, clamping so
     // the viewport does not move off the actual image:
-    private void shift(ImageView imageView, Point2D delta) {
+    private void shift(ImageView imageView, ImageView imageView2, Point2D delta) {
         Rectangle2D viewport = imageView.getViewport();
 
         double width = imageView.getImage().getWidth() ;
@@ -299,6 +302,7 @@ public class Controller implements Initializable {
         double minY = clamp(viewport.getMinY() - delta.getY(), 0, maxY);
 
         imageView.setViewport(new Rectangle2D(minX, minY, viewport.getWidth(), viewport.getHeight()));
+        imageView2.setViewport(new Rectangle2D(minX, minY, viewport.getWidth(), viewport.getHeight()));
     }
 
     private double clamp(double value, double min, double max) {
