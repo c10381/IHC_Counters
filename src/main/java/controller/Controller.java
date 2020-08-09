@@ -20,11 +20,15 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.*;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import models.Settings;
+//import org.controlsfx.control.RangeSlider;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -61,6 +65,8 @@ public class Controller implements Initializable {
     @FXML private TextField higherSize;
     @FXML private TextField lowerCircularity;
     @FXML private TextField upperCircularity;
+    @FXML private CheckBox saveOverlayMaskPics;
+    @FXML private TextArea savePathText;
     /**
      * 按 addBtn 跳出選擇上傳的圖片
      */
@@ -180,7 +186,7 @@ public class Controller implements Initializable {
         ParticleAnalyzer pa = new ParticleAnalyzer(ParticleAnalyzer.SHOW_MASKS, Measurements.PERIMETER, rt,
             Double.parseDouble(lowerSize.getText()), Double.parseDouble(higherSize.getText()), Double.parseDouble(lowerCircularity.getText()), Double.parseDouble(upperCircularity.getText()));
         //不要圖片跳出來
-        pa.setHideOutputImage(true);
+//        pa.setHideOutputImage(true);
         pa.analyze(imagePlus, imageProcessor);
         System.out.println(rt.getCounter());
 
@@ -333,21 +339,30 @@ public class Controller implements Initializable {
      * @param textField 顯示文字欄位id
      * */
     ChangeListener<Number> setValue(TextField textField ,Boolean integer) {
-        return new ChangeListener<Number>() {
-            @Override
-            public void changed(
-                    ObservableValue<? extends Number> observable,
-                    Number oldValue, Number newValue) {
-                String v = String.format("%d", newValue.intValue());
-                if(!integer){
-                    v=String.format("%.2f", newValue.doubleValue());
-                }
-                textField.setText(v);
-                runAnalysis();
+        return (ObservableValue<? extends Number> observable, Number oldValue, Number newValue) ->{
+            String v = String.format("%d", newValue.intValue());
+            if(!integer){
+                v=String.format("%.2f", newValue.doubleValue());
             }
+            textField.setText(v);
+            runAnalysis();
         };
     }
 
+    @FXML
+    public void handleSavePathChooserAction(){
+        if(saveOverlayMaskPics.isSelected()) {
+            DirectoryChooser dirchooser = new DirectoryChooser();
+            Stage stage = new Stage();
+            File files = dirchooser.showDialog(stage);
+            if (!files.getPath().equals("")) {
+                System.out.println(files.getPath());
+                savePathText.setText(files.getPath());
+            }
+        }else{
+            savePathText.setText("");
+        }
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
