@@ -20,14 +20,12 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.*;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import models.Settings;
-//import org.controlsfx.control.RangeSlider;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,6 +35,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+
+//import org.controlsfx.control.RangeSlider;
 
 //import org.controlsfx.control.RangeSlider;
 
@@ -93,8 +93,12 @@ public class Controller implements Initializable {
      */
     @FXML public void getSelectedFilePath() {
         if(!table.getItems().isEmpty()){
+            //選擇圖片路徑
         selected = table.getSelectionModel().getSelectedItem();
             beforeImage.setImage(this.retrievePic(selected));
+            if(settings.getColor() != null){
+                analyzeImage(new ImagePlus(selected, SwingFXUtils.fromFXImage(beforeImage.getImage(),null)));
+            }
             zoomIn(beforeImage, afterImage);
         }
     }
@@ -103,12 +107,19 @@ public class Controller implements Initializable {
      * onAction 按 開始分析 取得 前端設定 的資料以及所有 上傳檔案的路徑 並轉成ImagePlus格式
      */
     public void runAnalysis(){
-
         settings.setFilePaths(filePaths);
         //若有一堆圖要分析 目前 button按了只會分析選的那張圖
         //可以思考把Settings.class刪除 沒有用到
         var images = settings.getFilePaths().stream().map(filepath-> new ImagePlus(filepath, SwingFXUtils.fromFXImage(this.retrievePic(filepath),null))).collect(Collectors.toList());
-        analyzeImage(images.get(0));
+        images.forEach(this::analyzeImage);
+    }
+
+    /**
+     * onMouseRelease 分析單一選擇的圖
+     */
+    public void runSingleImageAnalysis(){
+        var image = new ImagePlus(selected, SwingFXUtils.fromFXImage(this.retrievePic(selected),null));
+        analyzeImage(image);
     }
 
     /**
@@ -116,13 +127,11 @@ public class Controller implements Initializable {
      * @param imagePlus
      */
     private void analyzeImage(ImagePlus imagePlus){
-        System.out.println(colorChoiceBox.getValue());
         ImageConverter imageConverter = new ImageConverter(imagePlus);
         ColorSpaceConverter colorSpaceConverter = new ColorSpaceConverter();
         ColorProcessor colorProcessor = new ColorProcessor(imagePlus.getBufferedImage());
         ImageProcessor imageProcessor =null;
         //顏色分析
-        System.out.println(imagePlus);
         switch(colorChoiceBox.getValue()){
             case "8-bit":
                 imageConverter.convertToGray8();
@@ -179,18 +188,24 @@ public class Controller implements Initializable {
 
         imageProcessor.setThreshold(Double.parseDouble(lowThreshold.getText()), Double.parseDouble(upperThreshold.getText()), imageProcessor.getLutUpdateMode());
         ResultsTable rt = new ResultsTable();
-        System.out.println(imagePlus);
         //ParticleAnalyzer.SHOW_MASKS --> 顯示圖片 一塊一塊黑
         //ParticleAnalyzer.SHOW_OUTLINES --> 顯示圖片 圈起來
         //ParticleAnalyzer.SHOW_ROI_MASKS --> 好問題還沒跑過
-        ParticleAnalyzer pa = new ParticleAnalyzer(ParticleAnalyzer.SHOW_ROI_MASKS, Measurements.PERIMETER, rt,
+        ParticleAnalyzer pa = new ParticleAnalyzer(ParticleAnalyzer.SHOW_MASKS, Measurements.PERIMETER, rt,
             Double.parseDouble(lowerSize.getText()), Double.parseDouble(higherSize.getText()), Double.parseDouble(lowerCircularity.getText()), Double.parseDouble(upperCircularity.getText()));
         //不要圖片跳出來
         pa.setHideOutputImage(true);
         pa.analyze(imagePlus, imageProcessor);
         System.out.println(rt.getCounter());
-
         afterImage.setImage(SwingFXUtils.toFXImage(pa.getOutputImage().getBufferedImage(), null));
+        //儲存設定值
+        settings.setColor(colorChoiceBox.getValue());
+        settings.setLowThresholdLevel(Double.parseDouble(lowThreshold.getText()));
+        settings.setUpperThresholdLevel(Double.parseDouble(upperThreshold.getText()));
+        settings.setLowerCircularity(Double.parseDouble(lowerCircularity.getText()));
+        settings.setUpperCircularity(Double.parseDouble(upperCircularity.getText()));
+        settings.setLowerSize(Double.parseDouble(lowerSize.getText()));
+        settings.setHigherSize(Double.parseDouble(higherSize.getText()));
         zoomIn(afterImage, beforeImage);
     }
 
@@ -214,7 +229,6 @@ public class Controller implements Initializable {
      * @param imageView1
      */
     private void zoomIn(ImageView imageView1, ImageView imageView2){
-        System.out.println("AAAAAAAAAA " + imageView1);
         final int MIN_PIXELS = 10;
         double width = imageView1.getImage().getWidth();
         double height = imageView1.getImage().getHeight();
@@ -239,7 +253,6 @@ public class Controller implements Initializable {
         imageView1.setOnScroll(e -> {
             double delta = e.getDeltaY();
             Rectangle2D viewport = imageView1.getViewport();
-            System.out.println(viewport);
             double scale = clamp(Math.pow(1.01, delta),
 
                     // don't scale so we're zoomed in to fewer than MIN_PIXELS in any direction:
@@ -349,7 +362,6 @@ public class Controller implements Initializable {
                 v=String.format("%.2f", newValue.doubleValue());
             }
             textField.setText(v);
-            // runAnalysis();
         };
     }
 
@@ -360,7 +372,6 @@ public class Controller implements Initializable {
             Stage stage = new Stage();
             File files = dirchooser.showDialog(stage);
             if (!files.getPath().equals("")) {
-                System.out.println(files.getPath());
                 savePathText.setText(files.getPath());
             }
         }else{
