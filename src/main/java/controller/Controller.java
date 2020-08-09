@@ -23,7 +23,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -50,7 +49,7 @@ public class Controller implements Initializable {
 
     @FXML private TableView<String> table;
     @FXML private TableColumn<String, String> filePathColumn;
-    @FXML private ImageView imageView;
+    @FXML private ImageView beforeImage;
     @FXML private ImageView afterImage;
     @FXML private ChoiceBox<String> colorChoiceBox;
     @FXML private Slider lowThresholdSlider;
@@ -95,8 +94,8 @@ public class Controller implements Initializable {
     @FXML public void getSelectedFilePath() {
         if(!table.getItems().isEmpty()){
         selected = table.getSelectionModel().getSelectedItem();
-            imageView.setImage(this.retrievePic(selected));
-            zoomIn(imageView);
+            beforeImage.setImage(this.retrievePic(selected));
+            zoomIn(beforeImage);
         }
     }
 
@@ -183,10 +182,10 @@ public class Controller implements Initializable {
         //ParticleAnalyzer.SHOW_MASKS --> 顯示圖片 一塊一塊黑
         //ParticleAnalyzer.SHOW_OUTLINES --> 顯示圖片 圈起來
         //ParticleAnalyzer.SHOW_ROI_MASKS --> 好問題還沒跑過
-        ParticleAnalyzer pa = new ParticleAnalyzer(ParticleAnalyzer.SHOW_MASKS, Measurements.PERIMETER, rt,
+        ParticleAnalyzer pa = new ParticleAnalyzer(ParticleAnalyzer.SHOW_ROI_MASKS, Measurements.PERIMETER, rt,
             Double.parseDouble(lowerSize.getText()), Double.parseDouble(higherSize.getText()), Double.parseDouble(lowerCircularity.getText()), Double.parseDouble(upperCircularity.getText()));
         //不要圖片跳出來
-//        pa.setHideOutputImage(true);
+        pa.setHideOutputImage(true);
         pa.analyze(imagePlus, imageProcessor);
         System.out.println(rt.getCounter());
 
@@ -219,7 +218,7 @@ public class Controller implements Initializable {
         double height = imageView.getImage().getHeight();
 
         imageView.setPreserveRatio(true);
-        reset(this.imageView, width / 2, height / 2);
+        reset(this.beforeImage, width / 2, height / 2);
 
         ObjectProperty<Point2D> mouseDown = new SimpleObjectProperty<>();
 
@@ -232,12 +231,12 @@ public class Controller implements Initializable {
         imageView.setOnMouseDragged(e -> {
             Point2D dragPoint = imageViewToImage(imageView, new Point2D(e.getX(), e.getY()));
             shift(imageView, dragPoint.subtract(mouseDown.get()));
-            mouseDown.set(imageViewToImage(this.imageView, new Point2D(e.getX(), e.getY())));
+            mouseDown.set(imageViewToImage(this.beforeImage, new Point2D(e.getX(), e.getY())));
         });
 
-        this.imageView.setOnScroll(e -> {
+        this.beforeImage.setOnScroll(e -> {
             double delta = e.getDeltaY();
-            Rectangle2D viewport = this.imageView.getViewport();
+            Rectangle2D viewport = this.beforeImage.getViewport();
 
             double scale = clamp(Math.pow(1.01, delta),
 
@@ -249,7 +248,7 @@ public class Controller implements Initializable {
 
             );
 
-            Point2D mouse = imageViewToImage(this.imageView, new Point2D(e.getX(), e.getY()));
+            Point2D mouse = imageViewToImage(this.beforeImage, new Point2D(e.getX(), e.getY()));
 
             double newWidth = viewport.getWidth() * scale;
             double newHeight = viewport.getHeight() * scale;
@@ -270,12 +269,12 @@ public class Controller implements Initializable {
             double newMinY = clamp(mouse.getY() - (mouse.getY() - viewport.getMinY()) * scale,
                     0, height - newHeight);
 
-            this.imageView.setViewport(new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
+            this.beforeImage.setViewport(new Rectangle2D(newMinX, newMinY, newWidth, newHeight));
         });
 
-        this.imageView.setOnMouseClicked(e -> {
+        this.beforeImage.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) {
-                reset(this.imageView, width, height);
+                reset(this.beforeImage, width, height);
             }
         });
     }
