@@ -103,6 +103,7 @@ public class Controller implements Initializable {
      * onAction 按 開始分析 取得 前端設定 的資料以及所有 上傳檔案的路徑 並轉成ImagePlus格式
      */
     public void runAnalysis(){
+
         settings.setFilePaths(filePaths);
         //若有一堆圖要分析 目前 button按了只會分析選的那張圖
         //可以思考把Settings.class刪除 沒有用到
@@ -157,21 +158,21 @@ public class Controller implements Initializable {
                 imageProcessor = colorProcessor.getHSBStack().getProcessor(3);
                 break;
             case "L*":
-                //imageProcessor = colorSpaceConverter.RGBToLab(imagePlus).getStack().getProcessor(1);
-                imageConverter.convertToLab();
-                imageProcessor = imagePlus.getImageStack().getProcessor(1);
+                imageProcessor = colorSpaceConverter.RGBToLab(imagePlus).getStack().getProcessor(1);
+//                imageConverter.convertToLab();
+//                imageProcessor = imagePlus.getImageStack().getProcessor(1);
                 imageConverter.convertToGray8();
                 break;
             case "a*":
-                //imageProcessor = colorSpaceConverter.RGBToLab(imagePlus).getStack().getProcessor(2);
-                imageConverter.convertToLab();
-                imageProcessor = imagePlus.getImageStack().getProcessor(2);
+                imageProcessor = colorSpaceConverter.RGBToLab(imagePlus).getStack().getProcessor(2);
+//                imageConverter.convertToLab();
+//                imageProcessor = imagePlus.getImageStack().getProcessor(2);
                 imageConverter.convertToGray8();
                 break;
             case "b*":
-                //imageProcessor = colorSpaceConverter.RGBToLab(imagePlus).getStack().getProcessor(3);
-                imageConverter.convertToLab();
-                imageProcessor = imagePlus.getImageStack().getProcessor(3);
+                imageProcessor = colorSpaceConverter.RGBToLab(imagePlus).getStack().getProcessor(3);
+//                imageConverter.convertToLab();
+//                imageProcessor = imagePlus.getImageStack().getProcessor(3);
                 imageConverter.convertToGray8();
                 break;
         }
@@ -348,7 +349,7 @@ public class Controller implements Initializable {
                 v=String.format("%.2f", newValue.doubleValue());
             }
             textField.setText(v);
-            runAnalysis();
+            // runAnalysis();
         };
     }
 

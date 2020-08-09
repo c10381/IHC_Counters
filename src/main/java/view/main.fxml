@@ -86,14 +86,14 @@
                                           <Font size="14.0" />
                                        </font>
                                     </Text>
-                                    <Slider fx:id="lowThresholdSlider" layoutX="180.0" layoutY="91.0" majorTickUnit="50.0" max="450.0" prefHeight="11.0" prefWidth="167.0" showTickLabels="true" showTickMarks="true" />
+                                    <Slider fx:id="lowThresholdSlider" layoutX="180.0" layoutY="91.0" majorTickUnit="50.0" max="450.0" onMouseReleased="#runAnalysis" prefHeight="11.0" prefWidth="167.0" showTickLabels="true" showTickMarks="true" />
                                     <TextField fx:id="lowThreshold" alignment="CENTER" layoutX="114.0" layoutY="97.0" prefHeight="27.0" prefWidth="54.0" text="0" />
                                     <Text layoutX="6.0" layoutY="158.0" strokeType="OUTSIDE" strokeWidth="0.0" text="upperThreshold" textAlignment="CENTER" wrappingWidth="98.99999976158142">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Text>
-                                    <Slider fx:id="upperThresholdSilder" layoutX="180.0" layoutY="134.0" majorTickUnit="50.0" max="420.0" prefHeight="11.0" prefWidth="167.0" showTickLabels="true" showTickMarks="true" value="140.0" />
+                                    <Slider fx:id="upperThresholdSilder" layoutX="180.0" layoutY="134.0" majorTickUnit="50.0" max="420.0" onMouseReleased="#runAnalysis" prefHeight="11.0" prefWidth="167.0" showTickLabels="true" showTickMarks="true" value="140.0" />
                                     <TextField fx:id="upperThreshold" alignment="CENTER" layoutX="114.0" layoutY="140.0" prefHeight="27.0" prefWidth="54.0" text="140" />
                                     <Text layoutX="23.0" layoutY="238.0" strokeType="OUTSIDE" strokeWidth="0.0" text="higherSize" textAlignment="CENTER" wrappingWidth="69.99999976158142">
                                        <font>
@@ -106,13 +106,13 @@
                                        </font>
                                     </Text>
                                     <CheckBox fx:id="saveOverlayMaskPics" layoutX="27.0" layoutY="358.0" mnemonicParsing="false" onAction="#handleSavePathChooserAction" text="是否儲存分析後圖檔" />
-                                    <Slider fx:id="lowerSizeSlider" layoutX="180.0" layoutY="173.0" majorTickUnit="200.0" max="1000.0" minorTickCount="10" prefHeight="11.0" prefWidth="167.0" showTickLabels="true" showTickMarks="true" value="25.0" />
+                                    <Slider fx:id="lowerSizeSlider" layoutX="180.0" layoutY="173.0" majorTickUnit="200.0" max="1000.0" minorTickCount="10" onMouseReleased="#runAnalysis" prefHeight="11.0" prefWidth="167.0" showTickLabels="true" showTickMarks="true" value="25.0" />
                                     <TextField fx:id="lowerSize" alignment="CENTER" layoutX="114.0" layoutY="179.0" prefHeight="27.0" prefWidth="54.0" text="25" />
-                                    <Slider fx:id="higherSizeSlider" layoutX="180.0" layoutY="214.0" majorTickUnit="200.0" max="1000.0" minorTickCount="10" prefHeight="11.0" prefWidth="167.0" showTickLabels="true" showTickMarks="true" />
+                                    <Slider fx:id="higherSizeSlider" layoutX="180.0" layoutY="214.0" majorTickUnit="200.0" max="1000.0" minorTickCount="10" onMouseReleased="#runAnalysis" prefHeight="11.0" prefWidth="167.0" showTickLabels="true" showTickMarks="true" />
                                     <TextField fx:id="higherSize" alignment="CENTER" layoutX="114.0" layoutY="220.0" prefHeight="27.0" prefWidth="54.0" text="1000" />
-                                    <Slider fx:id="lowerCircularitySlider" layoutX="180.0" layoutY="255.0" majorTickUnit="0.5" max="1.0" prefHeight="11.0" prefWidth="167.0" showTickLabels="true" showTickMarks="true" />
+                                    <Slider fx:id="lowerCircularitySlider" layoutX="180.0" layoutY="255.0" majorTickUnit="0.5" max="1.0" onMouseReleased="#runAnalysis" prefHeight="11.0" prefWidth="167.0" showTickLabels="true" showTickMarks="true" />
                                     <TextField fx:id="lowerCircularity" alignment="CENTER" layoutX="114.0" layoutY="260.0" prefHeight="27.0" prefWidth="54.0" text="0.00" />
-                                    <Slider fx:id="upperCircularitySlider" layoutX="180.0" layoutY="294.0" majorTickUnit="0.5" max="1.0" prefHeight="11.0" prefWidth="167.0" showTickLabels="true" showTickMarks="true" value="1.0" />
+                                    <Slider fx:id="upperCircularitySlider" layoutX="180.0" layoutY="294.0" majorTickUnit="0.5" max="1.0" onMouseReleased="#runAnalysis" prefHeight="11.0" prefWidth="167.0" showTickLabels="true" showTickMarks="true" value="1.0" />
                                     <TextField fx:id="upperCircularity" alignment="CENTER" layoutX="114.0" layoutY="299.0" prefHeight="27.0" prefWidth="54.0" text="1.00" />
                                     <TextArea fx:id="savePathText" editable="false" layoutX="180.0" layoutY="349.0" prefHeight="18.0" prefWidth="172.0" />
                                     <!--<RangeSlider fx:id="ThresholdLevel"/>-->
