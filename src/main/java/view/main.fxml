@@ -52,7 +52,7 @@
                         <content>
                           <AnchorPane prefHeight="408.0" prefWidth="353.0">
                                  <children>
-                                    <ChoiceBox fx:id="colorChoiceBox" layoutX="116.0" layoutY="27.0" onAction="#runAnalysis" prefHeight="27.0" prefWidth="176.0">
+                                    <ChoiceBox fx:id="colorChoiceBox" layoutX="116.0" layoutY="27.0" onAction="#runSingleImageAnalysis" prefHeight="27.0" prefWidth="176.0">
                                         <String fx:value="8-bit" />
                                         <String fx:value="16-bit" />
                                         <String fx:value="32-bit" />

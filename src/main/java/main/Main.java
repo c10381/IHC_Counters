@@ -6,10 +6,10 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.fxml.JavaFXBuilderFactory;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import models.Output;
+import models.Settings;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -23,6 +23,7 @@ public class Main extends Application {
     //用來拋結果的Map
     private static Map<String,Object> Model=new HashMap<String, Object>();
     private Stage stage;
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         stage = primaryStage;
@@ -41,10 +42,10 @@ public class Main extends Application {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public void goResultPage(){
+    public void goResultPage(List<Output> output, Settings settings){
         try {
             ResultController resultPage = (ResultController) replaceSceneContent("/view/result.fxml");
-            resultPage.setApp(this);
+            resultPage.setApp(this, output, settings);
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -63,14 +64,6 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
-    }
-
-    public Map<String, Object> getModel() {
-        return Model;
-    }
-
-    public void setModel(Map<String, Object> model) {
-        Model = model;
     }
 
 }

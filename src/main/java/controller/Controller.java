@@ -3,12 +3,8 @@ package controller;
 import ij.ImagePlus;
 import ij.measure.Measurements;
 import ij.measure.ResultsTable;
-import ij.plugin.filter.Analyzer;
 import ij.plugin.filter.ParticleAnalyzer;
-import ij.process.ColorProcessor;
-import ij.process.ColorSpaceConverter;
-import ij.process.ImageConverter;
-import ij.process.ImageProcessor;
+import ij.process.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -16,14 +12,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -31,6 +23,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import main.Main;
+import models.Output;
 import models.Settings;
 
 import java.io.File;
@@ -39,7 +32,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -132,7 +124,7 @@ public class Controller implements Initializable {
      * 分析圖片 吐出分析後照
      * @param imagePlus
      */
-    private void analyzeImage(ImagePlus imagePlus){
+    private Output analyzeImage(ImagePlus imagePlus){
         ImageConverter imageConverter = new ImageConverter(imagePlus);
         ColorSpaceConverter colorSpaceConverter = new ColorSpaceConverter();
         ColorProcessor colorProcessor = new ColorProcessor(imagePlus.getBufferedImage());
@@ -193,10 +185,20 @@ public class Controller implements Initializable {
         //不要圖片跳出來
         pa.setHideOutputImage(true);
         pa.analyze(imagePlus, imageProcessor);
-        System.out.println(rt.getCounter());
         afterImage.setImage(SwingFXUtils.toFXImage(pa.getOutputImage().getBufferedImage(), null));
         //儲存設定值
+        settings.setColor(colorChoiceBox.getValue());
+        settings.setHigherSize(Double.parseDouble(higherSize.getText()));
+        settings.setLowerSize(Double.parseDouble(lowerSize.getText()));
+        settings.setLowerCircularity(Double.parseDouble(lowerCircularity.getText()));
+        settings.setUpperCircularity(Double.parseDouble(upperCircularity.getText()));
+        settings.setUpperThresholdLevel(Double.parseDouble(upperThreshold.getText()));
+        settings.setLowThresholdLevel(Double.parseDouble(lowThreshold.getText()));
+        settings.setSavePathText(savePathText.getText());
+
         zoomIn(afterImage, beforeImage);
+        var imageTitle = imagePlus.getTitle().substring(imagePlus.getTitle().lastIndexOf("\\")+1);
+        return Output.builder().counter(rt.getCounter()).slice(imageTitle).build();
     }
 
     /**
@@ -382,11 +384,8 @@ public class Controller implements Initializable {
         //若有一堆圖要分析 目前 button按了只會分析選的那張圖
         //可以思考把Settings.class刪除 沒有用到
         var images = settings.getFilePaths().stream().map(filepath-> new ImagePlus(filepath, SwingFXUtils.fromFXImage(this.retrievePic(filepath),null))).collect(Collectors.toList());
-        images.forEach(this::analyzeImage);
-
-        application.getModel().put("Settings",settings);
+        var outputs = images.stream().map(this::analyzeImage).collect(Collectors.toList());
         //輸出塞這裡，預期會是List
-        application.getModel().put("Output",settings);
-        application.goResultPage();
+        application.goResultPage(outputs, settings);
     }
 }
