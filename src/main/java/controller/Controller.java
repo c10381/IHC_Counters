@@ -380,15 +380,4 @@ public class Controller implements Initializable {
         SliderInit();
     }
 
-//    public void open(ActionEvent event) throws Exception {
-//        Stage stage=new Stage();
-//        Parent root = FXMLLoader.load(Thread.currentThread().getContextClassLoader().getResource("result.fxml"));
-//        stage.setTitle("第二個視窗");
-//        stage.setScene(new Scene(root));
-//        stage.show();
-//        //將第二個視窗儲存到map中
-////        StageManager.STAGE.put("second", stage);
-////        //將本視窗儲存到map中
-////        StageManager.CONTROLLER.put("indexControl", this);
-//    }
 }
