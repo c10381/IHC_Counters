@@ -47,7 +47,6 @@ public class ResultController implements Initializable {
                 .map(eachOutput -> eachOutput.getSlice().replace(",", " ") + "," +
                         eachOutput.getCounter()).collect(Collectors.toList());
         var headings = "slice" + "," + "counter";
-        System.out.println(setting.getSavePathText());
         File csvOutputFile = new File(setting.getSavePathText()+"\\results.csv");
         try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
             pw.println(headings);
