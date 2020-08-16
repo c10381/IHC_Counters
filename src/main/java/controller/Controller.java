@@ -30,6 +30,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import main.Main;
 import models.Settings;
 
 import java.io.File;
@@ -48,7 +49,7 @@ import java.util.stream.Collectors;
 
 public class Controller implements Initializable {
 
-
+    private Main application;
     private Settings settings = Settings.builder().build();
     private List<String> filePaths = new ArrayList<>();
     private String selected = "";
@@ -72,6 +73,12 @@ public class Controller implements Initializable {
     @FXML private TextField upperCircularity;
     @FXML private CheckBox saveOverlayMaskPics;
     @FXML private TextArea savePathText;
+
+
+
+    public void setApp(Main application){
+        this.application = application;
+    }
     /**
      * 按 addBtn 跳出選擇上傳的圖片
      */
@@ -110,21 +117,7 @@ public class Controller implements Initializable {
         }
     }
 
-    /**
-     * onAction 按 開始分析 取得 前端設定 的資料以及所有 上傳檔案的路徑 並轉成ImagePlus格式
-     */
-    public void runAnalysis() throws IOException {
-//        settings.setFilePaths(filePaths);
-//        //若有一堆圖要分析 目前 button按了只會分析選的那張圖
-//        //可以思考把Settings.class刪除 沒有用到
-//        var images = settings.getFilePaths().stream().map(filepath-> new ImagePlus(filepath, SwingFXUtils.fromFXImage(this.retrievePic(filepath),null))).collect(Collectors.toList());
-//        images.forEach(this::analyzeImage);
-        Stage stage=new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/view/result.fxml"));
-        stage.setTitle("第二個視窗");
-        stage.setScene(new Scene(root));
-        stage.show();
-    }
+
 
     /**
      * onMouseRelease 分析單一選擇的圖
@@ -380,4 +373,15 @@ public class Controller implements Initializable {
         SliderInit();
     }
 
+    /**
+     * onAction 按 開始分析 取得 前端設定 的資料以及所有 上傳檔案的路徑 並轉成ImagePlus格式
+     */
+    public void runAnalysis() throws IOException {
+//        settings.setFilePaths(filePaths);
+//        //若有一堆圖要分析 目前 button按了只會分析選的那張圖
+//        //可以思考把Settings.class刪除 沒有用到
+//        var images = settings.getFilePaths().stream().map(filepath-> new ImagePlus(filepath, SwingFXUtils.fromFXImage(this.retrievePic(filepath),null))).collect(Collectors.toList());
+//        images.forEach(this::analyzeImage);
+        application.goResult();
+    }
 }
