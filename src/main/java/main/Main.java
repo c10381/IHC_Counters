@@ -12,11 +12,16 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
 public class Main extends Application {
+    //用來拋結果的Map
+    private static Map<String,Object> Model=new HashMap<String, Object>();
     private Stage stage;
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -24,11 +29,11 @@ public class Main extends Application {
         stage.setTitle("IHC Counter");
         primaryStage.setTitle("IHC Counter");
         //primaryStage.setScene(new Scene(root, 300, 275));
-        goSelectSample();
+        goSelectSamplePage();
         primaryStage.show();
     }
 
-    public void goSelectSample(){
+    public void goSelectSamplePage(){
         try {
             Controller selectSamplePage = (Controller) replaceSceneContent("/view/main.fxml");
             selectSamplePage.setApp(this);
@@ -36,7 +41,7 @@ public class Main extends Application {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public void goResult(){
+    public void goResultPage(){
         try {
             ResultController resultPage = (ResultController) replaceSceneContent("/view/result.fxml");
             resultPage.setApp(this);
@@ -60,6 +65,12 @@ public class Main extends Application {
         launch(args);
     }
 
+    public Map<String, Object> getModel() {
+        return Model;
+    }
 
+    public void setModel(Map<String, Object> model) {
+        Model = model;
+    }
 
 }

@@ -39,6 +39,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -377,11 +378,15 @@ public class Controller implements Initializable {
      * onAction 按 開始分析 取得 前端設定 的資料以及所有 上傳檔案的路徑 並轉成ImagePlus格式
      */
     public void runAnalysis() throws IOException {
-//        settings.setFilePaths(filePaths);
-//        //若有一堆圖要分析 目前 button按了只會分析選的那張圖
-//        //可以思考把Settings.class刪除 沒有用到
-//        var images = settings.getFilePaths().stream().map(filepath-> new ImagePlus(filepath, SwingFXUtils.fromFXImage(this.retrievePic(filepath),null))).collect(Collectors.toList());
-//        images.forEach(this::analyzeImage);
-        application.goResult();
+        settings.setFilePaths(filePaths);
+        //若有一堆圖要分析 目前 button按了只會分析選的那張圖
+        //可以思考把Settings.class刪除 沒有用到
+        var images = settings.getFilePaths().stream().map(filepath-> new ImagePlus(filepath, SwingFXUtils.fromFXImage(this.retrievePic(filepath),null))).collect(Collectors.toList());
+        images.forEach(this::analyzeImage);
+
+        application.getModel().put("Settings",settings);
+        //輸出塞這裡，預期會是List
+        application.getModel().put("Output",settings);
+        application.goResultPage();
     }
 }

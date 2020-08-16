@@ -12,7 +12,6 @@ public class ResultController implements Initializable {
         this.application = application;
     }
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize(URL location, ResourceBundle resources) { }
 
-    }
 }
