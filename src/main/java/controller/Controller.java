@@ -16,10 +16,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -31,6 +35,7 @@ import models.Settings;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -108,12 +113,17 @@ public class Controller implements Initializable {
     /**
      * onAction 按 開始分析 取得 前端設定 的資料以及所有 上傳檔案的路徑 並轉成ImagePlus格式
      */
-    public void runAnalysis(){
-        settings.setFilePaths(filePaths);
-        //若有一堆圖要分析 目前 button按了只會分析選的那張圖
-        //可以思考把Settings.class刪除 沒有用到
-        var images = settings.getFilePaths().stream().map(filepath-> new ImagePlus(filepath, SwingFXUtils.fromFXImage(this.retrievePic(filepath),null))).collect(Collectors.toList());
-        images.forEach(this::analyzeImage);
+    public void runAnalysis() throws IOException {
+//        settings.setFilePaths(filePaths);
+//        //若有一堆圖要分析 目前 button按了只會分析選的那張圖
+//        //可以思考把Settings.class刪除 沒有用到
+//        var images = settings.getFilePaths().stream().map(filepath-> new ImagePlus(filepath, SwingFXUtils.fromFXImage(this.retrievePic(filepath),null))).collect(Collectors.toList());
+//        images.forEach(this::analyzeImage);
+        Stage stage=new Stage();
+        Parent root = FXMLLoader.load(getClass().getResource("/view/result.fxml"));
+        stage.setTitle("第二個視窗");
+        stage.setScene(new Scene(root));
+        stage.show();
     }
 
     /**
@@ -369,4 +379,16 @@ public class Controller implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         SliderInit();
     }
+
+//    public void open(ActionEvent event) throws Exception {
+//        Stage stage=new Stage();
+//        Parent root = FXMLLoader.load(Thread.currentThread().getContextClassLoader().getResource("result.fxml"));
+//        stage.setTitle("第二個視窗");
+//        stage.setScene(new Scene(root));
+//        stage.show();
+//        //將第二個視窗儲存到map中
+////        StageManager.STAGE.put("second", stage);
+////        //將本視窗儲存到map中
+////        StageManager.CONTROLLER.put("indexControl", this);
+//    }
 }

@@ -11,7 +11,7 @@
 
 <!--<?import org.controlsfx.control.RangeSlider?>-->
 
-<ToolBar prefHeight="455.0" prefWidth="744.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
+<ToolBar prefHeight="455.0" prefWidth="744.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ResultController">
    <items>
       <SplitPane dividerPositions="0.782967032967033" prefHeight="443.0" prefWidth="730.0">
         <items>
@@ -23,7 +23,7 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="408.0" prefWidth="341.0">
                                  <children>
-                                    <TableView fx:id="table" layoutX="10.0" layoutY="10.0" onMouseClicked="#getSelectedFilePath" prefHeight="388.0" prefWidth="551.0" />
+                                    <TableView fx:id="table" layoutX="10.0" layoutY="10.0"  prefHeight="388.0" prefWidth="551.0" />
                                  </children>
                               </AnchorPane>
                         </content>
@@ -34,8 +34,8 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="441.0" prefWidth="223.0">
                <children>
-                  <Button layoutX="25.0" layoutY="394.0" mnemonicParsing="false" onAction="#runAnalysis" prefHeight="27.0" prefWidth="93.0" text="重新分析" />
-                  <Button layoutX="25.0" layoutY="360.0" mnemonicParsing="false" onAction="#runAnalysis" prefHeight="27.0" prefWidth="93.0" text="輸出CSV" />
+                  <Button layoutX="25.0" layoutY="394.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="93.0" text="重新分析" />
+                  <Button layoutX="25.0" layoutY="360.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="93.0" text="輸出CSV" />
                   <Label layoutX="11.0" layoutY="82.0" text="Threshold" />
                   <Label layoutX="12.0" layoutY="99.0" text="Size" />
                   <Label layoutX="11.0" layoutY="116.0" text="Circularity" />
