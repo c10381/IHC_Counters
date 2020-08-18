@@ -248,7 +248,12 @@ public class Controller implements Initializable {
 
         zoomIn(afterImage, beforeImage);
         var imageTitle = imagePlus.getTitle().substring(imagePlus.getTitle().lastIndexOf("\\")+1);
-        return Output.builder().counter(rt.getCounter()).slice(imageTitle).build();
+        var imageName = imagePlus.getTitle().substring(imagePlus.getTitle().lastIndexOf("/")+1,imagePlus.getTitle().length());
+        return Output.builder()
+                .counter(rt.getCounter())
+                .slice(imageTitle)
+                .sliceName(imageName)
+                .build();
     }
 
     /**
@@ -435,4 +440,6 @@ public class Controller implements Initializable {
         var outputs = images.stream().map(this::analyzeImage).collect(Collectors.toList());
         application.goResultPage(outputs, settings);
     }
+
+
 }

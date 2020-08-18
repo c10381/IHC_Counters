@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Output {
+    String sliceName;
     String slice;
     Integer counter;
 }

@@ -116,7 +116,7 @@
                                     <TextField fx:id="upperCircularity" alignment="CENTER" layoutX="114.0" layoutY="299.0" prefHeight="27.0" prefWidth="54.0" />
                                     <TextArea fx:id="savePathText" editable="false" layoutX="180.0" layoutY="349.0" prefHeight="18.0" prefWidth="172.0" />
                                     <CheckBox fx:id="realtimeChange" layoutX="254.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleSavePathChooserAction" text="即時查看" />
-                                    <!--<RangeSlider fx:id="ThresholdLevel"/>-->
+
                                  </children>
                               </AnchorPane>
                   

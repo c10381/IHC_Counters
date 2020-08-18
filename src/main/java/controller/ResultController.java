@@ -35,7 +35,7 @@ public class ResultController implements Initializable {
 
     public void setApp(Main application, List<Output> output, Settings settings){
         this.application = application;
-        sliceColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSlice()));
+        sliceColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSliceName()));
         counterColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getCounter()));
         results.setItems(FXCollections.observableList(output));
         outputs = output;
@@ -47,6 +47,7 @@ public class ResultController implements Initializable {
         threaholdRange.setText(setting.getLowThresholdLevel()+"-"+setting.getUpperThresholdLevel());
         sizeRange.setText(setting.getLowerSize()+"-"+setting.getHigherSize());
         circularityRange.setText(setting.getLowerCircularity()+"-"+setting.getUpperCircularity());
+
     }
     /**
      * onAction 輸出CSV
@@ -55,10 +56,11 @@ public class ResultController implements Initializable {
     @SneakyThrows
     public void outputCSV(){
         var output = outputs.stream()
-                .map(eachOutput -> eachOutput.getSlice().replace(",", " ") + "," +
+                .map(eachOutput -> eachOutput.getSliceName() + "," +
                         eachOutput.getCounter()).collect(Collectors.toList());
         var headings = "slice" + "," + "counter";
-        File csvOutputFile = new File(setting.getSavePathText()+"\\results.csv");
+        var filePath = setting.getFilePaths().get(0).substring(0,setting.getFilePaths().get(0).lastIndexOf("/")+1);
+        File csvOutputFile = new File(filePath+"results.csv");
         try (PrintWriter pw = new PrintWriter(csvOutputFile)) {
             pw.println(headings);
             output.stream().forEach(pw::println);
