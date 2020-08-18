@@ -7,8 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
+import javafx.scene.text.Text;
 import lombok.SneakyThrows;
 import main.Main;
 import models.Output;
@@ -26,6 +25,10 @@ public class ResultController implements Initializable {
     @FXML private TableView<Output> results;
     @FXML private TableColumn<Output, Number> counterColumn;
     @FXML private TableColumn<Output, String> sliceColumn;
+    @FXML private Text colorName;
+    @FXML private Text threaholdRange;
+    @FXML private Text sizeRange;
+    @FXML private Text circularityRange;
 
     private List<Output> outputs;
     private Settings setting;
@@ -37,8 +40,14 @@ public class ResultController implements Initializable {
         results.setItems(FXCollections.observableList(output));
         outputs = output;
         setting = settings;
+        showSettingValue();
     }
-
+    public void showSettingValue(){
+        colorName.setText(setting.getColor());
+        threaholdRange.setText(setting.getLowThresholdLevel()+"-"+setting.getUpperThresholdLevel());
+        sizeRange.setText(setting.getLowerSize()+"-"+setting.getHigherSize());
+        circularityRange.setText(setting.getLowerCircularity()+"-"+setting.getUpperCircularity());
+    }
     /**
      * onAction 輸出CSV
      */
@@ -65,6 +74,6 @@ public class ResultController implements Initializable {
     }
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) { }
+    public void initialize(URL location, ResourceBundle resources) {}
 
 }

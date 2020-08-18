@@ -63,6 +63,7 @@ public class Controller implements Initializable {
     @FXML private TextField lowerCircularity;
     @FXML private TextField upperCircularity;
     @FXML private CheckBox saveOverlayMaskPics;
+    @FXML private CheckBox realtimeChange;
     @FXML private TextArea savePathText;
 
 
@@ -71,26 +72,46 @@ public class Controller implements Initializable {
         this.application = application;
         Optional.ofNullable(settings)
                 .ifPresentOrElse(this::reAnalysisSitting,
-                        () -> this.settings =Settings.builder().build());
+                        () -> {
+                            Settings S =Settings.builder()
+                            .color("8-bit")
+                            .lowThresholdLevel(0.0)
+                            .upperThresholdLevel(140.0)
+                            .lowerSize(20.0)
+                            .higherSize(500.0)
+                            .lowerCircularity(0.0)
+                            .upperCircularity(1.0)
+                            .saveOverlayMaskPics(false)
+                            .savePathText("")
+                            .build();
+                            reAnalysisSitting(S);
+                        });
     }
     /**
      * 重新載入上一次變更的設定值
      */
     public void reAnalysisSitting(Settings settings){
         this.settings = settings;
-        this.filePaths = settings.getFilePaths();
-        colorChoiceBox.setValue(settings.getColor());
-        lowThresholdSlider.setValue(settings.getLowThresholdLevel());
-        upperThresholdSilder.setValue(settings.getUpperThresholdLevel());
-        lowerSizeSlider.setValue(settings.getLowerSize());
-        higherSizeSlider.setValue(settings.getHigherSize());
-        lowerCircularitySlider.setValue(settings.getLowerCircularity());
-        upperCircularitySlider.setValue(settings.getUpperCircularity());
-        Optional.ofNullable(filePaths)
+        Optional.ofNullable(settings.getFilePaths())
                 .ifPresent(e -> {
+                    this.filePaths = settings.getFilePaths();
                     filePathColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()));
                     table.setItems(FXCollections.observableList(e));
                 });
+
+        colorChoiceBox.setValue(this.settings.getColor());
+        lowThresholdSlider.setValue(this.settings.getLowThresholdLevel());
+        lowThreshold.setText(this.settings.getLowThresholdLevel().toString());
+        upperThresholdSilder.setValue(this.settings.getUpperThresholdLevel());
+        upperThreshold.setText(this.settings.getUpperThresholdLevel().toString());
+        lowerSizeSlider.setValue(this.settings.getLowerSize());
+        lowerSize.setText(this.settings.getLowerSize().toString());
+        higherSizeSlider.setValue(this.settings.getHigherSize());
+        higherSize.setText(this.settings.getHigherSize().toString());
+        lowerCircularitySlider.setValue(this.settings.getLowerCircularity());
+        lowerCircularity.setText(this.settings.getLowerCircularity().toString());
+        upperCircularitySlider.setValue(this.settings.getUpperCircularity());
+        upperCircularity.setText(this.settings.getUpperCircularity().toString());
     }
     /**
      * 按 addBtn 跳出選擇上傳的圖片
@@ -136,6 +157,8 @@ public class Controller implements Initializable {
      * onMouseRelease 分析單一選擇的圖
      */
     public void runSingleImageAnalysis(){
+        if(!realtimeChange.isSelected())
+            return;
         if(filePaths.size()==0)
             return;
         if(selected.isEmpty()){
@@ -151,6 +174,7 @@ public class Controller implements Initializable {
      * @param imagePlus
      */
     private Output analyzeImage(ImagePlus imagePlus){
+
         ImageConverter imageConverter = new ImageConverter(imagePlus);
         ColorSpaceConverter colorSpaceConverter = new ColorSpaceConverter();
         ColorProcessor colorProcessor = new ColorProcessor(imagePlus.getBufferedImage());
