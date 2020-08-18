@@ -33,17 +33,15 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-//import org.controlsfx.control.RangeSlider;
-
-//import org.controlsfx.control.RangeSlider;
 
 public class Controller implements Initializable {
 
     private Main application;
-    private Settings settings = Settings.builder().build();
+    private Settings settings ;
     private List<String> filePaths = new ArrayList<>();
     private String selected = "";
 
@@ -69,8 +67,30 @@ public class Controller implements Initializable {
 
 
 
-    public void setApp(Main application){
+    public void setApp(Main application, Settings settings){
         this.application = application;
+        Optional.ofNullable(settings)
+                .ifPresentOrElse(this::reAnalysisSitting,
+                        () -> this.settings =Settings.builder().build());
+    }
+    /**
+     * 重新載入上一次變更的設定值
+     */
+    public void reAnalysisSitting(Settings settings){
+        this.settings = settings;
+        this.filePaths = settings.getFilePaths();
+        colorChoiceBox.setValue(settings.getColor());
+        lowThresholdSlider.setValue(settings.getLowThresholdLevel());
+        upperThresholdSilder.setValue(settings.getUpperThresholdLevel());
+        lowerSizeSlider.setValue(settings.getLowerSize());
+        higherSizeSlider.setValue(settings.getHigherSize());
+        lowerCircularitySlider.setValue(settings.getLowerCircularity());
+        upperCircularitySlider.setValue(settings.getUpperCircularity());
+        Optional.ofNullable(filePaths)
+                .ifPresent(e -> {
+                    filePathColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue()));
+                    table.setItems(FXCollections.observableList(e));
+                });
     }
     /**
      * 按 addBtn 跳出選擇上傳的圖片
@@ -116,6 +136,12 @@ public class Controller implements Initializable {
      * onMouseRelease 分析單一選擇的圖
      */
     public void runSingleImageAnalysis(){
+        if(filePaths.size()==0)
+            return;
+        if(selected.isEmpty()){
+            selected=filePaths.get(0);
+            beforeImage.setImage(this.retrievePic(selected));
+        }
         var image = new ImagePlus(selected, SwingFXUtils.fromFXImage(this.retrievePic(selected),null));
         analyzeImage(image);
     }
@@ -218,7 +244,7 @@ public class Controller implements Initializable {
 
     /**
      * 放大縮小照片
-     * @param imageView1
+     * @param imageView1,imageView2
      */
     private void zoomIn(ImageView imageView1, ImageView imageView2){
         final int MIN_PIXELS = 10;
@@ -381,11 +407,8 @@ public class Controller implements Initializable {
      */
     public void runAnalysis() throws IOException {
         settings.setFilePaths(filePaths);
-        //若有一堆圖要分析 目前 button按了只會分析選的那張圖
-        //可以思考把Settings.class刪除 沒有用到
         var images = settings.getFilePaths().stream().map(filepath-> new ImagePlus(filepath, SwingFXUtils.fromFXImage(this.retrievePic(filepath),null))).collect(Collectors.toList());
         var outputs = images.stream().map(this::analyzeImage).collect(Collectors.toList());
-        //輸出塞這裡，預期會是List
         application.goResultPage(outputs, settings);
     }
 }

@@ -7,6 +7,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import lombok.SneakyThrows;
 import main.Main;
 import models.Output;
@@ -52,6 +54,14 @@ public class ResultController implements Initializable {
             pw.println(headings);
             output.stream().forEach(pw::println);
         }
+    }
+
+    /**
+     * 按 addBtn 跳出選擇上傳的圖片
+     */
+    @FXML
+    public void reAnalysis(){
+        application.goSelectSamplePage(setting);
     }
 
     @Override

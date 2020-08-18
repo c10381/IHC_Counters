@@ -30,14 +30,14 @@ public class Main extends Application {
         stage.setTitle("IHC Counter");
         primaryStage.setTitle("IHC Counter");
         //primaryStage.setScene(new Scene(root, 300, 275));
-        goSelectSamplePage();
+        goSelectSamplePage(null);
         primaryStage.show();
     }
-
-    public void goSelectSamplePage(){
+    //至不同頁面的方法，並一併將此Main放入其Controller
+    public void goSelectSamplePage(Settings settings){
         try {
             Controller selectSamplePage = (Controller) replaceSceneContent("/view/main.fxml");
-            selectSamplePage.setApp(this);
+            selectSamplePage.setApp(this,settings);
         } catch (Exception ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
